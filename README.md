@@ -279,3 +279,162 @@ This script will configure your Dock with the following settings:
 After running the script, your Dock will restart with the new configuration applied.
 
 Congratulations! You now have a clean installation of macOS Sonoma on your MacBook Pro M3 Max with customized Finder settings, Homebrew installed, 1Password installed, and a customized Dock configuration. All your setup scripts are neatly organized in the `/home/developer/setup-scripts` folder for future use or modifications.
+
+## Step 13: Install and Configure Oh My Zsh
+
+Oh My Zsh is a framework for managing your Zsh configuration. We'll install it and set up the theme and plugins you specified.
+
+1. First, let's create a script to automate the Oh My Zsh installation and configuration. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+
+   ```
+   nano setup_ohmyzsh.sh
+   ```
+
+2. In the nano editor, paste the following script:
+
+   ```bash
+   #!/bin/bash
+
+   # Install Oh My Zsh
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+   # Set the theme
+   sed -i '' 's/ZSH_THEME="robbyrussell"/ZSH_THEME="half-life"/' ~/.zshrc
+
+   # Set the plugins
+   sed -i '' 's/plugins=(git)/plugins=(git macos web-search)/' ~/.zshrc
+
+   # Source the updated .zshrc file
+   source ~/.zshrc
+
+   echo "Oh My Zsh has been installed and configured!"
+   ```
+
+3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+
+4. Make the script executable by running:
+
+   ```
+   chmod +x setup_ohmyzsh.sh
+   ```
+
+5. Run the Oh My Zsh setup script:
+
+   ```
+   ./setup_ohmyzsh.sh
+   ```
+
+6. The script will install Oh My Zsh, set the theme to "half-life", and add the git, macos, and web-search plugins.
+
+7. After the script finishes, close and reopen your Terminal to see the changes take effect.
+
+This script does the following:
+
+- Installs Oh My Zsh
+- Sets the ZSH_THEME to "half-life"
+- Configures the plugins to include git, macos, and web-search
+- Sources the updated .zshrc file to apply the changes
+
+Your Terminal should now be using the Oh My Zsh framework with the specified theme and plugins.
+
+## Step 14: Install Utilities
+
+We'll now install several useful utilities using Homebrew.
+
+1. Create a new script to install the utilities. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+
+   ```
+   nano install_utilities.sh
+   ```
+
+2. In the nano editor, paste the following script:
+
+   ```bash
+   #!/bin/bash
+
+   # Install utilities using Homebrew
+   brew install --cask warp
+   brew install --cask google-chrome
+   brew install --cask brave-browser
+   brew install --cask chatgpt
+   brew install --cask visual-studio-code
+   brew install --cask slack
+   brew install --cask zoom
+
+   echo "Utilities have been installed successfully!"
+   ```
+
+3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+
+4. Make the script executable by running:
+
+   ```
+   chmod +x install_utilities.sh
+   ```
+
+5. Run the utilities installation script:
+   ```
+   ./install_utilities.sh
+   ```
+
+## Step 15: Update Dock Configuration
+
+Now that we've installed new applications, let's update the Dock configuration.
+
+1. Create a new script to update the Dock. In Terminal, run:
+
+   ```
+   nano update_dock.sh
+   ```
+
+2. In the nano editor, paste the following script:
+
+   ```bash
+   #!/bin/bash
+
+   # Check if dockutil is installed
+   if ! command -v dockutil &> /dev/null
+   then
+       echo "dockutil is not installed. Please install it first."
+       echo "You can install it using Homebrew: brew install dockutil"
+       exit 1
+   fi
+
+   # Remove all items from Dock
+   dockutil --remove all
+
+   # Add desired apps to Dock
+   dockutil --add /System/Applications/Finder.app
+   dockutil --add /Applications/Warp.app
+   dockutil --add /Applications/Google\ Chrome.app
+   dockutil --add /Applications/Brave\ Browser.app
+   dockutil --add /System/Applications/Messages.app
+   dockutil --add /System/Applications/App\ Store.app
+   dockutil --add /System/Applications/System\ Settings.app
+   dockutil --add /Applications/Slack.app
+   dockutil --add /Applications/Visual\ Studio\ Code.app
+   dockutil --add /Applications/ChatGPT.app
+
+   # Add Downloads folder to Dock
+   dockutil --add ~/Downloads --view fan --display folder
+
+   # Restart Dock to apply changes
+   killall Dock
+
+   echo "Dock has been successfully updated!"
+   ```
+
+3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+
+4. Make the script executable by running:
+
+   ```
+   chmod +x update_dock.sh
+   ```
+
+5. Run the Dock update script:
+   ```
+   ./update_dock.sh
+   ```
+
+Your Dock will now be configured with the newly installed applications in the specified order.
