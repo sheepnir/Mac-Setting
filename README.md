@@ -143,6 +143,111 @@ This script will configure Finder with the following settings:
 - Uncheck all tags in the sidebar
 - New Finder windows will show the Downloads folder
 
-Note: This script sets Finder to show hidden files. While this can be useful, be cautious when interacting with hidden files and folders, as they may contain sensitive system data.
+## Step 8: Install Homebrew
 
-Congratulations! You now have a clean installation of macOS Sonoma on your MacBook Pro M3 Max with customized Finder settings.
+Before we configure the Dock, we need to install Homebrew, which is a package manager for macOS. This process will also install Xcode Command Line Tools if they're not already installed.
+
+1. Open Terminal (you can find it in Applications > Utilities or use Spotlight to search for it).
+
+2. Install Homebrew by running the following command:
+
+   ```
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+
+3. Follow the prompts in the Terminal. You may be asked to enter your password.
+
+4. After the installation is complete, you might need to add Homebrew to your PATH. The installation script will tell you if this is necessary and provide the commands to do so. Typically, for Apple Silicon Macs, you'll need to run these commands:
+
+   ```
+   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+   eval "$(/opt/homebrew/bin/brew shellenv)"
+   ```
+
+5. Verify the installation by running:
+   ```
+   brew --version
+   ```
+   If Homebrew is installed correctly, this command will return the version number.
+
+## Step 9: Configure Dock Settings
+
+Now that Homebrew is installed, we can proceed with configuring your Dock using a custom script. This script will clear the Dock and add only the specified applications and folders. Follow these steps:
+
+1. First, install `dockutil`, a command-line utility for managing the macOS Dock:
+
+   ```
+   brew install dockutil
+   ```
+
+2. Open a text editor (such as TextEdit).
+
+3. Copy and paste the following script into a new file:
+
+   ```bash
+   #!/bin/bash
+
+   # Check if dockutil is installed
+   if ! command -v dockutil &> /dev/null
+   then
+       echo "dockutil is not installed. Please install it first."
+       echo "You can install it using Homebrew: brew install dockutil"
+       exit 1
+   fi
+
+   # Remove all items from Dock
+   dockutil --remove all
+
+   # Add desired apps to Dock
+   dockutil --add /System/Applications/Finder.app
+   dockutil --add /Applications/Safari.app
+   dockutil --add /System/Applications/System\ Settings.app
+   dockutil --add /System/Applications/Utilities/Terminal.app
+   dockutil --add /System/Applications/Messages.app
+
+   # Add Applications folder to Dock
+   dockutil --add /Applications --view grid --display folder
+
+   # Add Downloads folder to Dock
+   dockutil --add ~/Downloads --view fan --display folder
+
+   # Set Dock to show only open applications
+   defaults write com.apple.dock static-only -bool true
+
+   # Restart Dock to apply changes
+   killall Dock
+
+   echo "Dock has been successfully configured!"
+   ```
+
+4. Save the file with a `.sh` extension (e.g., `setup_dock.sh`) in a location you can easily access, such as your Desktop.
+
+5. In Terminal, navigate to the directory where you saved the script. If you saved it on your Desktop, you can use this command:
+
+   ```
+   cd ~/Desktop
+   ```
+
+6. Make the script executable by running:
+
+   ```
+   chmod +x setup_dock.sh
+   ```
+
+7. Run the script with:
+
+   ```
+   ./setup_dock.sh
+   ```
+
+8. You may be prompted to enter your administrator password. This is necessary because the script modifies system settings.
+
+This script will configure your Dock with the following settings:
+
+- Clear all existing items from the Dock
+- Add only Finder, Safari, Settings, Terminal, and Messages apps
+- Add the Applications folder, displayed as a folder with grid view
+- Add the Downloads folder, displayed as a folder with fan view
+- Set the Dock to show only open applications
+
+After running the script, your Dock will restart with the new configuration applied.
