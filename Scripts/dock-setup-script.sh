@@ -17,6 +17,7 @@ dockutil --add /Applications/Safari.app
 dockutil --add /System/Applications/System\ Settings.app
 dockutil --add /System/Applications/Utilities/Terminal.app
 dockutil --add /System/Applications/Messages.app
+dockutil --add /Applications/1Password.app
 
 # Add Applications folder to Dock
 dockutil --add /Applications --view grid --display folder

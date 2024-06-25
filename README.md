@@ -145,7 +145,7 @@ This script will configure Finder with the following settings:
 
 ## Step 8: Install Homebrew
 
-Before we configure the Dock, we need to install Homebrew, which is a package manager for macOS. This process will also install Xcode Command Line Tools if they're not already installed.
+After setting up Finder, we'll install Homebrew, which is a package manager for macOS. This process will also install Xcode Command Line Tools if they're not already installed.
 
 1. Open Terminal (you can find it in Applications > Utilities or use Spotlight to search for it).
 
@@ -170,19 +170,41 @@ Before we configure the Dock, we need to install Homebrew, which is a package ma
    ```
    If Homebrew is installed correctly, this command will return the version number.
 
-## Step 9: Configure Dock Settings
+## Step 9: Install 1Password
 
-Now that Homebrew is installed, we can proceed with configuring your Dock using a custom script. This script will clear the Dock and add only the specified applications and folders. Follow these steps:
+Now that Homebrew is installed, we can use it to install 1Password.
 
-1. First, install `dockutil`, a command-line utility for managing the macOS Dock:
+1. In Terminal, run the following command to install 1Password:
 
    ```
-   brew install dockutil
+   brew install --cask 1password
    ```
 
-2. Open a text editor (such as TextEdit).
+2. Follow any on-screen prompts to complete the installation.
 
-3. Copy and paste the following script into a new file:
+3. Once installed, launch 1Password and sign in to your account.
+
+## Step 10: Create Setup Scripts Folder
+
+We'll create a dedicated folder to store our setup scripts.
+
+1. In Terminal, run the following commands to create the folder and navigate to it:
+   ```
+   mkdir -p /home/developer/setup-scripts
+   cd /home/developer/setup-scripts
+   ```
+
+## Step 11: Create Dock Configuration Script
+
+Now we'll create a script to configure your Dock using nano, a command-line text editor.
+
+1. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+
+   ```
+   nano setup_dock.sh
+   ```
+
+2. In the nano editor, paste the following script:
 
    ```bash
    #!/bin/bash
@@ -204,6 +226,7 @@ Now that Homebrew is installed, we can proceed with configuring your Dock using 
    dockutil --add /System/Applications/System\ Settings.app
    dockutil --add /System/Applications/Utilities/Terminal.app
    dockutil --add /System/Applications/Messages.app
+   dockutil --add /Applications/1Password.app
 
    # Add Applications folder to Dock
    dockutil --add /Applications --view grid --display folder
@@ -220,34 +243,39 @@ Now that Homebrew is installed, we can proceed with configuring your Dock using 
    echo "Dock has been successfully configured!"
    ```
 
-4. Save the file with a `.sh` extension (e.g., `setup_dock.sh`) in a location you can easily access, such as your Desktop.
+3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
 
-5. In Terminal, navigate to the directory where you saved the script. If you saved it on your Desktop, you can use this command:
-
-   ```
-   cd ~/Desktop
-   ```
-
-6. Make the script executable by running:
-
+4. Make the script executable by running:
    ```
    chmod +x setup_dock.sh
    ```
 
-7. Run the script with:
+## Step 12: Install dockutil and Configure Dock
+
+Now we'll install dockutil and run our Dock configuration script.
+
+1. Install dockutil using Homebrew:
+
+   ```
+   brew install dockutil
+   ```
+
+2. Run the Dock configuration script:
 
    ```
    ./setup_dock.sh
    ```
 
-8. You may be prompted to enter your administrator password. This is necessary because the script modifies system settings.
+3. You may be prompted to enter your administrator password. This is necessary because the script modifies system settings.
 
 This script will configure your Dock with the following settings:
 
 - Clear all existing items from the Dock
-- Add only Finder, Safari, Settings, Terminal, and Messages apps
+- Add Finder, Safari, Settings, Terminal, Messages, and 1Password apps
 - Add the Applications folder, displayed as a folder with grid view
 - Add the Downloads folder, displayed as a folder with fan view
 - Set the Dock to show only open applications
 
 After running the script, your Dock will restart with the new configuration applied.
+
+Congratulations! You now have a clean installation of macOS Sonoma on your MacBook Pro M3 Max with customized Finder settings, Homebrew installed, 1Password installed, and a customized Dock configuration. All your setup scripts are neatly organized in the `/home/developer/setup-scripts` folder for future use or modifications.
