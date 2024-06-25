@@ -438,3 +438,95 @@ Now that we've installed new applications, let's update the Dock configuration.
    ```
 
 Your Dock will now be configured with the newly installed applications in the specified order.
+
+## Step 17: Set Up 1Password CLI and ProtonVPN Login
+
+Now that we have 1Password CLI installed, we can set up a script to help you log in to ProtonVPN using your 1Password-stored credentials, including support for multiple accounts and one-time passcodes.
+
+1. First, you need to sign in to 1Password CLI. In Terminal, run:
+
+   ```
+   op signin
+   ```
+
+   Follow the prompts to sign in to your 1Password account.
+
+2. Create a new script to assist with ProtonVPN login. In Terminal, run:
+
+   ```
+   nano protonvpn_login_assistant.sh
+   ```
+
+3. In the nano editor, paste the following script:
+
+   ```
+   #!/bin/bash
+
+    # Function to select ProtonVPN account
+    select_account() {
+    echo "Please select the ProtonVPN account you want to use:"
+    accounts=($(op item list --categories Login --tags ProtonVPN --format json | jq -r '.[].title'))
+    select account in "${accounts[@]}"; do
+        if [ -n "$account" ]; then
+            echo "You selected $account"
+            return
+        else
+            echo "Invalid selection. Please try again."
+        fi
+    done
+    }
+
+    # Call the function to select an account
+    select_account
+
+    # Retrieve ProtonVPN credentials from 1Password
+    echo "Retrieving ProtonVPN credentials from 1Password..."
+    PROTONVPN_USERNAME=$(op item get "$account" --format json | jq -r '.fields[] | select(.label == "username").value')
+    PROTONVPN_PASSWORD=$(op item get "$account" --format json | jq -r '.fields[] | select(.label == "password").value')
+    PROTONVPN_OTP=$(op item get "$account" --otp)
+
+    # Display the username and OTP (but not the password)
+    echo "Username: $PROTONVPN_USERNAME"
+    echo "One-Time Passcode: $PROTONVPN_OTP"
+    echo "Password has been retrieved (not displayed for security reasons)"
+
+    # Prompt user to open ProtonVPN and use the credentials
+    echo "Please open the ProtonVPN application and use the above credentials to log in."
+    echo "Press any key to open ProtonVPN..."
+    read -n 1 -s
+
+    # Open ProtonVPN
+    open -a ProtonVPN
+
+    echo "ProtonVPN has been opened. Please use the retrieved credentials to log in."
+    echo "Use the displayed One-Time Passcode if prompted for 2FA."
+   ```
+
+4. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+
+5. Make the script executable by running:
+
+   ```
+   chmod +x protonvpn_login_assistant.sh
+   ```
+
+6. When you want to log in to ProtonVPN, run:
+   ```
+   ./protonvpn_login_assistant.sh
+   ```
+
+This script will:
+
+1. Prompt you to select which ProtonVPN account you want to use.
+2. Retrieve the selected account's credentials from 1Password, including the username, password, and one-time passcode.
+3. Display the username and one-time passcode (but not the password for security reasons).
+4. Open the ProtonVPN application for you to log in manually using the retrieved information.
+
+Note: Ensure that your ProtonVPN login items in 1Password:
+
+- Are categorized as "Login"
+- Have a tag "ProtonVPN"
+- Have fields labeled "username" and "password"
+- Have the OTP (One-Time Password) set up if you're using 2FA
+
+Adjust the item details in 1Password if necessary to match these requirements.
