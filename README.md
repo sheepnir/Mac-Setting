@@ -530,3 +530,119 @@ Note: Ensure that your ProtonVPN login items in 1Password:
 - Have the OTP (One-Time Password) set up if you're using 2FA
 
 Adjust the item details in 1Password if necessary to match these requirements.
+
+## Step 18: Install Productivity Tools
+
+We'll now install several productivity tools and set some system defaults.
+
+1. Create a new script to install the productivity tools. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+
+   ```
+   nano install_productivity_tools.sh
+   ```
+
+2. In the nano editor, paste the following script:
+
+   [Insert the productivity-tools-install-script here]
+
+3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+
+4. Make the script executable by running:
+
+   ```
+   chmod +x install_productivity_tools.sh
+   ```
+
+5. Before running the script, we need to install `duti`, which is used to set default applications. Run:
+
+   ```
+   brew install duti
+   ```
+
+6. Run the productivity tools installation script:
+   ```
+   ./install_productivity_tools.sh
+   ```
+
+This script will:
+
+- Install the following applications using Homebrew:
+  - Zoom
+  - Firefox
+  - Evernote
+  - Raycast
+  - Bartender
+  - AppCleaner
+  - AlDente
+  - Grammarly
+  - Sublime Text
+  - Microsoft Word, Excel, and PowerPoint
+- Set Brave as the default browser
+- Set Sublime Text as the default text editor for plain text files, Unix executables, and source code files
+
+Note: Setting default applications might require you to confirm the changes in System Settings > Desktop & Dock > Default web browser and System Settings > Desktop & Dock > Default app for opening documents.
+
+After running the script, you may need to restart your computer or log out and log back in for all changes to take effect.
+
+## Step 19: Set Up Python for Development
+
+We'll now set up Python for development using Miniconda, which is ideal for data science projects. This setup will work seamlessly with VSCode.
+
+1. Create a new script to set up Python. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+
+   ```
+   nano setup_python_dev.sh
+   ```
+
+2. In the nano editor, paste the following script:
+
+   [Insert the updated python-dev-setup-script here]
+
+3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+
+4. Make the script executable by running:
+
+   ```
+   chmod +x setup_python_dev.sh
+   ```
+
+5. Run the Python setup script:
+
+   ```
+   ./setup_python_dev.sh
+   ```
+
+6. After the script finishes, close and reopen your terminal or run `source ~/.zshrc` to ensure the conda initialization takes effect.
+
+This script will:
+
+- Install Miniconda using Homebrew
+- Initialize conda for zsh
+- Create a new conda environment called 'testproject' with the latest stable Python version
+- Add conda-forge to the channels for a wider selection of packages
+- Install essential data science packages (numpy, pandas, matplotlib, seaborn, scikit-learn, jupyter) in the 'testproject' environment
+- Attempt to install openai and anthropic packages using conda, falling back to pip if necessary
+- Install the Python and Jupyter extensions for VSCode
+
+After running the script:
+
+7. Open VSCode and ensure it recognizes your conda environments:
+
+   - Open the Command Palette (Cmd+Shift+P)
+   - Type "Python: Select Interpreter"
+   - Choose the 'testproject' environment you just created
+
+8. To start a new Python project in VSCode:
+
+   - Open a new or existing project folder
+   - Create a new Python file or Jupyter notebook
+   - VSCode should automatically use the 'testproject' environment
+
+9. To activate your test project environment in the terminal, run:
+   ```
+   conda activate testproject
+   ```
+
+Remember to activate the 'testproject' environment whenever you're working on your projects. You can create additional environments for other projects as needed.
+
+Note: If you need to install additional packages in the future, you can use either `conda install package_name` or `pip install package_name` while your 'testproject' environment is activated.
