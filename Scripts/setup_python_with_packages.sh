@@ -14,32 +14,21 @@ brew install python
 
 # Get the path of the Homebrew-installed Python
 BREW_PYTHON_PATH=$(brew --prefix python)/bin/python3
-BREW_PIP_PATH=$(brew --prefix python)/bin/pip3
 
-# Verify the paths
-echo "Homebrew Python path: $BREW_PYTHON_PATH"
-echo "Homebrew Pip path: $BREW_PIP_PATH"
+# Create a virtual environment
+VENV_PATH="$HOME/python_env"
+echo "Creating virtual environment at $VENV_PATH..."
+$BREW_PYTHON_PATH -m venv $VENV_PATH
 
-# Add aliases to .zshrc (assuming you're using zsh, which is default on newer macOS)
-echo "Adding aliases to .zshrc..."
-echo "alias python='$BREW_PYTHON_PATH'" >> ~/.zshrc
-echo "alias pip='$BREW_PIP_PATH'" >> ~/.zshrc
+# Activate the virtual environment
+source $VENV_PATH/bin/activate
 
-# Set up VS Code to use the Homebrew-installed Python
-echo "Configuring VS Code..."
-mkdir -p ~/.vscode
-cat << EOF > ~/.vscode/settings.json
-{
-    "python.defaultInterpreterPath": "$BREW_PYTHON_PATH",
-    "python.terminal.activateEnvironment": true,
-    "python.pythonPath": "$BREW_PYTHON_PATH"
-}
-EOF
+# Upgrade pip in the virtual environment
+pip install --upgrade pip
 
-# Install common packages and API libraries
+# Install packages in the virtual environment
 echo "Installing common Python packages and API libraries..."
-$BREW_PIP_PATH install --upgrade pip
-$BREW_PIP_PATH install \
+pip install \
     requests \
     numpy \
     pandas \
@@ -51,6 +40,22 @@ $BREW_PIP_PATH install \
     openai \
     python-dotenv
 
+# Add aliases and activation to .zshrc
+echo "Adding aliases and activation to .zshrc..."
+echo "alias python='$VENV_PATH/bin/python'" >> ~/.zshrc
+echo "alias pip='$VENV_PATH/bin/pip'" >> ~/.zshrc
+echo "source $VENV_PATH/bin/activate" >> ~/.zshrc
+
+# Set up VS Code to use the virtual environment
+echo "Configuring VS Code..."
+mkdir -p ~/.vscode
+cat << EOF > ~/.vscode/settings.json
+{
+    "python.defaultInterpreterPath": "$VENV_PATH/bin/python",
+    "python.terminal.activateEnvironment": true
+}
+EOF
+
 echo "Setup complete! Please restart your terminal and VS Code for changes to take effect."
-echo "After restarting, run 'which python' to verify it points to: $BREW_PYTHON_PATH"
-echo "Common packages and API libraries have been installed."
+echo "After restarting, your terminal will automatically activate the virtual environment."
+echo "Run 'which python' to verify it points to: $VENV_PATH/bin/python"
