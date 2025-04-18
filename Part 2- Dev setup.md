@@ -1,225 +1,19 @@
-# MacBook Pro M3 Max (14") Development Environment Setup
+# MacBook - VS Code and GitHub Setup
 
-This guide provides step-by-step instructions for setting up a development environment on your MacBook Pro M3 Max, focusing on Docker and Python development in containers.
+This guide covers setting up Visual Studio Code with essential extensions and configuring GitHub for development on your MacBook Pro M3 Max.
 
-## Prerequisites
+## Step 1: Install VS Code
 
-Ensure you've completed the basic setup steps from the first part of this guide (Steps 1-12).
+If you haven't already installed VS Code during the basic setup:
 
-## Step 1: Install Docker Desktop for Mac
+```bash
+brew install --cask visual-studio-code
+```
 
-1. Install Docker Desktop using Homebrew:
-   ```
-   brew install --cask docker
-   ```
-
-2. Launch Docker Desktop from your Applications folder.
-
-3. Follow the on-screen instructions to complete the installation and configuration.
-
-4. Verify Docker installation in Terminal:
-   ```
-   docker --version
-   docker compose version
-   ```
-
-5. Create a script to optimize Docker for M3 Max:
-   ```
-   cd ~/Developer/setup-scripts
-   nano docker_optimize.sh
-   ```
-
-6. Add the following content:
-   ```bash
-   #!/bin/bash
-   
-   # Create Docker configuration directory if it doesn't exist
-   mkdir -p ~/.docker
-   
-   # Configure Docker Desktop for M3 Max performance
-   cat > ~/.docker/daemon.json << EOF
-   {
-     "experimental": true,
-     "builder": {
-       "gc": {
-         "enabled": true,
-         "defaultKeepStorage": "20GB"
-       }
-     },
-     "features": {
-       "buildkit": true
-     },
-     "resources": {
-       "memory": 16.0,
-       "cpu": 10
-     }
-   }
-   EOF
-   
-   echo "Docker has been optimized for M3 Max. Please restart Docker Desktop."
-   ```
-
-7. Make the script executable and run it:
-   ```
-   chmod +x docker_optimize.sh
-   ./docker_optimize.sh
-   ```
-
-8. Restart Docker Desktop to apply the changes.
-
-## Step 2: Set Up Python Development Environment with Docker
-
-1. Create a Docker Python development script:
-   ```
-   cd ~/Developer/setup-scripts
-   nano setup_python_docker.sh
-   ```
-
-2. Add the following content:
-   ```bash
-   #!/bin/bash
-   
-   # Create a Python development directory
-   mkdir -p ~/Developer/python-projects
-   
-   # Create a template Dockerfile for Python development
-   cat > ~/Developer/python-projects/Dockerfile.template << EOF
-   FROM python:3.12-slim
-   
-   WORKDIR /app
-   
-   # Install system dependencies
-   RUN apt-get update && apt-get install -y \\
-       build-essential \\
-       curl \\
-       git \\
-       && rm -rf /var/lib/apt/lists/*
-   
-   # Install Python dependencies
-   COPY requirements.txt .
-   RUN pip install --no-cache-dir -r requirements.txt
-   
-   # Copy source code
-   COPY . .
-   
-   # Command to run when container starts
-   CMD ["python", "app.py"]
-   EOF
-   
-   # Create a template docker-compose.yml file
-   cat > ~/Developer/python-projects/docker-compose.template.yml << EOF
-   version: '3.8'
-   
-   services:
-     app:
-       build: .
-       volumes:
-         - .:/app
-       ports:
-         - "8000:8000"
-       environment:
-         - PYTHONUNBUFFERED=1
-       command: python app.py
-   EOF
-   
-   # Create a template requirements.txt file
-   cat > ~/Developer/python-projects/requirements.template.txt << EOF
-   # Data analysis & machine learning
-   numpy
-   pandas
-   scikit-learn
-   matplotlib
-   seaborn
-   jupyter
-   
-   # Web development
-   fastapi
-   uvicorn
-   
-   # API clients
-   requests
-   anthropic
-   openai
-   
-   # Development tools
-   pytest
-   black
-   isort
-   mypy
-   python-dotenv
-   EOF
-   
-   # Create a script to initialize a new Python Docker project
-   cat > ~/Developer/python-projects/init_project.sh << EOF
-   #!/bin/bash
-   
-   if [ -z "\$1" ]; then
-     echo "Please provide a project name"
-     echo "Usage: ./init_project.sh <project_name>"
-     exit 1
-   fi
-   
-   PROJECT_NAME="\$1"
-   mkdir -p "\$PROJECT_NAME"
-   cd "\$PROJECT_NAME"
-   
-   cp ../Dockerfile.template Dockerfile
-   cp ../docker-compose.template.yml docker-compose.yml
-   cp ../requirements.template.txt requirements.txt
-   
-   # Create app.py file
-   cat > app.py << EOL
-   def main():
-       print("Hello from \$PROJECT_NAME!")
-       
-   if __name__ == "__main__":
-       main()
-   EOL
-   
-   # Create a README.md file
-   cat > README.md << EOL
-   # \$PROJECT_NAME
-   
-   Python project running in Docker.
-   
-   ## Setup
-   
-   1. Build the Docker image:
-      \`\`\`
-      docker-compose build
-      \`\`\`
-      
-   2. Run the container:
-      \`\`\`
-      docker-compose up
-      \`\`\`
-      
-   3. For interactive shell:
-      \`\`\`
-      docker-compose run app bash
-      \`\`\`
-   EOL
-   
-   echo "\$PROJECT_NAME has been initialized. Go to \$PROJECT_NAME directory to start developing."
-   EOF
-   
-   # Make the init script executable
-   chmod +x ~/Developer/python-projects/init_project.sh
-   
-   echo "Python Docker development environment has been set up."
-   echo "Use ~/Developer/python-projects/init_project.sh <project_name> to create a new project."
-   ```
-
-3. Make the script executable and run it:
-   ```
-   chmod +x setup_python_docker.sh
-   ./setup_python_docker.sh
-   ```
-
-## Step 3: Install VS Code Extensions for Docker and Python Development
+## Step 2: Install Essential VS Code Extensions
 
 1. Create a script to install VS Code extensions:
-   ```
+   ```bash
    cd ~/Developer/setup-scripts
    nano install_vscode_extensions.sh
    ```
@@ -228,29 +22,47 @@ Ensure you've completed the basic setup steps from the first part of this guide 
    ```bash
    #!/bin/bash
    
-   # Install VS Code extensions for Docker and Python
+   # Install general development extensions
+   code --install-extension ms-vscode.vscode-typescript-next
+   code --install-extension streetsidesoftware.code-spell-checker
+   code --install-extension eamodio.gitlens
+   code --install-extension esbenp.prettier-vscode
+   code --install-extension usernamehw.errorlens
+   code --install-extension wayou.vscode-todo-highlight
+   code --install-extension yzhang.markdown-all-in-one
+   
+   # Install Python extensions
    code --install-extension ms-python.python
+   code --install-extension ms-python.vscode-pylance
+   code --install-extension ms-python.black-formatter
+   code --install-extension matangover.mypy
+   code --install-extension ms-toolsai.jupyter
+   
+   # Install Docker extensions
    code --install-extension ms-azuretools.vscode-docker
    code --install-extension ms-vscode-remote.remote-containers
-   code --install-extension ms-vscode.vscode-typescript-next
-   code --install-extension ms-python.vscode-pylance
-   code --install-extension ms-toolsai.jupyter
-   code --install-extension matangover.mypy
-   code --install-extension ms-python.black-formatter
+   
+   # Install Git extensions
+   code --install-extension mhutchie.git-graph
+   code --install-extension donjayamanne.githistory
+   
+   # Install theme extensions (optional - adjust to your preference)
+   code --install-extension github.github-vscode-theme
+   code --install-extension zhuangtongfa.material-theme
    
    echo "VS Code extensions have been installed successfully!"
    ```
 
 3. Make the script executable and run it:
-   ```
+   ```bash
    chmod +x install_vscode_extensions.sh
    ./install_vscode_extensions.sh
    ```
 
-## Step 4: Configure VS Code for Docker and Python Development
+## Step 3: Configure VS Code Settings
 
 1. Create a script to configure VS Code settings:
-   ```
+   ```bash
    cd ~/Developer/setup-scripts
    nano configure_vscode.sh
    ```
@@ -262,21 +74,45 @@ Ensure you've completed the basic setup steps from the first part of this guide 
    # Create VS Code settings directory if it doesn't exist
    mkdir -p ~/Library/Application\ Support/Code/User
    
-   # Configure VS Code settings for Docker and Python
+   # Configure VS Code settings
    cat > ~/Library/Application\ Support/Code/User/settings.json << EOF
    {
      "editor.formatOnSave": true,
+     "editor.formatOnPaste": true,
+     "editor.minimap.enabled": false,
      "editor.rulers": [88],
+     "editor.tabSize": 4,
+     "editor.wordWrap": "on",
+     "editor.linkedEditing": true,
+     "editor.bracketPairColorization.enabled": true,
+     "editor.guides.bracketPairs": true,
+     "editor.suggestSelection": "first",
+     "editor.cursorBlinking": "smooth",
+     "editor.cursorSmoothCaretAnimation": "on",
+     
      "files.trimTrailingWhitespace": true,
      "files.insertFinalNewline": true,
      "files.trimFinalNewlines": true,
+     "files.autoSave": "onFocusChange",
+     
+     "workbench.startupEditor": "none",
+     "workbench.colorTheme": "GitHub Dark Default",
+     "workbench.iconTheme": "material-icon-theme",
+     "workbench.editor.enablePreview": false,
+     
+     "terminal.integrated.defaultProfile.osx": "zsh",
+     "terminal.integrated.fontFamily": "MesloLGS NF",
+     "terminal.integrated.fontSize": 13,
+     
+     "git.autofetch": true,
+     "git.confirmSync": false,
+     "git.enableSmartCommit": true,
      
      "python.formatting.provider": "black",
      "python.linting.enabled": true,
-     "python.linting.mypyEnabled": true,
      "python.linting.pylintEnabled": true,
-     
-     "docker.showStartPage": false,
+     "python.linting.mypyEnabled": true,
+     "python.terminal.activateEnvironment": true,
      
      "[python]": {
        "editor.defaultFormatter": "ms-python.black-formatter",
@@ -286,494 +122,600 @@ Ensure you've completed the basic setup steps from the first part of this guide 
        }
      },
      
-     "python.terminal.activateEnvironment": true,
-     "terminal.integrated.defaultProfile.osx": "zsh",
-     "terminal.integrated.fontFamily": "MesloLGS NF"
+     "markdown.preview.fontSize": 14,
+     
+     "explorer.confirmDelete": false,
+     "explorer.confirmDragAndDrop": false,
+     
+     "todo-tree.general.tags": [
+       "BUG",
+       "HACK",
+       "FIXME",
+       "TODO",
+       "XXX",
+       "[ ]",
+       "[x]"
+     ],
+     
+     "cSpell.userWords": [],
+     
+     "telemetry.telemetryLevel": "off"
    }
    EOF
    
-   echo "VS Code has been configured for Docker and Python development."
+   # Configure keybindings
+   cat > ~/Library/Application\ Support/Code/User/keybindings.json << EOF
+   [
+     {
+       "key": "cmd+d",
+       "command": "editor.action.copyLinesDownAction",
+       "when": "editorTextFocus && !editorReadonly"
+     },
+     {
+       "key": "shift+alt+down",
+       "command": "-editor.action.copyLinesDownAction",
+       "when": "editorTextFocus && !editorReadonly"
+     },
+     {
+       "key": "cmd+shift+k",
+       "command": "editor.action.deleteLines",
+       "when": "editorTextFocus && !editorReadonly"
+     },
+     {
+       "key": "cmd+shift+d",
+       "command": "editor.action.duplicateSelection"
+     }
+   ]
+   EOF
+   
+   echo "VS Code has been configured successfully."
    ```
 
 3. Make the script executable and run it:
-   ```
+   ```bash
    chmod +x configure_vscode.sh
    ./configure_vscode.sh
    ```
 
-## Step 5: Create Docker Compose Development Templates
+## Step 4: Configure VS Code for Python Development
 
-1. Create a directory for Docker Compose templates:
-   ```
-   mkdir -p ~/Developer/docker-templates
-   ```
-
-2. Create a script to generate templates:
-   ```
+1. Create a script to configure VS Code for Python:
+   ```bash
    cd ~/Developer/setup-scripts
-   nano create_docker_templates.sh
+   nano configure_vscode_python.sh
    ```
 
-3. Add the following content:
+2. Add the following content:
    ```bash
    #!/bin/bash
    
-   # Create directory for templates if it doesn't exist
-   mkdir -p ~/Developer/docker-templates
-   
-   # Create a template for Python FastAPI development
-   cat > ~/Developer/docker-templates/fastapi-template.yml << EOF
-   version: '3.8'
-   
-   services:
-     api:
-       build: .
-       volumes:
-         - .:/app
-       ports:
-         - "8000:8000"
-       environment:
-         - PYTHONUNBUFFERED=1
-       command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-       depends_on:
-         - db
-     
-     db:
-       image: postgres:14
-       volumes:
-         - postgres_data:/var/lib/postgresql/data
-       environment:
-         - POSTGRES_USER=postgres
-         - POSTGRES_PASSWORD=postgres
-         - POSTGRES_DB=app
-       ports:
-         - "5432:5432"
-   
-   volumes:
-     postgres_data:
+   # Configure Python-specific settings
+   cat > ~/Library/Application\ Support/Code/User/python.code-snippets << EOF
+   {
+     "Main function": {
+       "prefix": "main",
+       "body": [
+         "def main():",
+         "    $0",
+         "",
+         "",
+         "if __name__ == \"__main__\":",
+         "    main()"
+       ],
+       "description": "Create a main function with if __name__ == \"__main__\" guard"
+     },
+     "Print variable": {
+       "prefix": "printv",
+       "body": [
+         "print(f\"$1 = {$1}\")"
+       ],
+       "description": "Print a variable with its name and value"
+     },
+     "Create class": {
+       "prefix": "class",
+       "body": [
+         "class $1:",
+         "    \"\"\"",
+         "    $2",
+         "    \"\"\"",
+         "    ",
+         "    def __init__(self, $3):",
+         "        $0",
+         "    ",
+         "    def __str__(self):",
+         "        return f\"$1({self.__dict__})\"",
+         "    ",
+         "    def __repr__(self):",
+         "        return self.__str__()",
+         ""
+       ],
+       "description": "Create a Python class with __init__, __str__, and __repr__ methods"
+     }
+   }
    EOF
    
-   # Create a template for data science projects
-   cat > ~/Developer/docker-templates/datascience-template.yml << EOF
-   version: '3.8'
+   echo "VS Code has been configured for Python development."
+   ```
+
+3. Make the script executable and run it:
+   ```bash
+   chmod +x configure_vscode_python.sh
+   ./configure_vscode_python.sh
+   ```
+
+## Step 5: Set Up Git Configuration
+
+1. Create a script to configure Git:
+   ```bash
+   cd ~/Developer/setup-scripts
+   nano setup_git.sh
+   ```
+
+2. Add the following content:
+   ```bash
+   #!/bin/bash
    
-   services:
-     notebook:
-       build: .
-       volumes:
-         - .:/app
-       ports:
-         - "8888:8888"
-       environment:
-         - PYTHONUNBUFFERED=1
-       command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+   # Prompt for Git configuration
+   read -p "Enter your Git username: " GIT_USERNAME
+   read -p "Enter your Git email: " GIT_EMAIL
+   
+   # Configure Git
+   git config --global user.name "$GIT_USERNAME"
+   git config --global user.email "$GIT_EMAIL"
+   
+   # Configure Git defaults
+   git config --global init.defaultBranch main
+   git config --global pull.rebase true
+   git config --global core.editor "code --wait"
+   git config --global core.autocrlf input
+   
+   # Configure Git aliases
+   git config --global alias.st status
+   git config --global alias.co checkout
+   git config --global alias.br branch
+   git config --global alias.ci commit
+   git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+   git config --global alias.unstage "reset HEAD --"
+   git config --global alias.last "log -1 HEAD"
+   git config --global alias.amend "commit --amend"
+   
+   # Create global .gitignore
+   cat > ~/.gitignore_global << EOF
+   # macOS
+   .DS_Store
+   .AppleDouble
+   .LSOverride
+   ._*
+   
+   # VS Code
+   .vscode/*
+   !.vscode/settings.json
+   !.vscode/tasks.json
+   !.vscode/launch.json
+   !.vscode/extensions.json
+   
+   # Python
+   __pycache__/
+   *.py[cod]
+   *$py.class
+   *.so
+   .Python
+   env/
+   build/
+   develop-eggs/
+   dist/
+   downloads/
+   eggs/
+   .eggs/
+   lib/
+   lib64/
+   parts/
+   sdist/
+   var/
+   *.egg-info/
+   .installed.cfg
+   *.egg
+   .pytest_cache/
+   .coverage
+   htmlcov/
+   .tox/
+   .coverage.*
+   .cache
+   
+   # Virtual Environments
+   .env
+   .venv
+   env/
+   venv/
+   ENV/
+   
+   # Jupyter Notebooks
+   .ipynb_checkpoints
+   
+   # IDE-specific
+   .idea/
+   *.swp
+   *.swo
+   
+   # Docker
+   .docker/
    EOF
    
-   # Create a template for multi-container development
-   cat > ~/Developer/docker-templates/multi-service-template.yml << EOF
+   git config --global core.excludesfile ~/.gitignore_global
+   
+   echo "Git has been configured successfully!"
+   ```
+
+3. Make the script executable and run it:
+   ```bash
+   chmod +x setup_git.sh
+   ./setup_git.sh
+   ```
+
+## Step 6: Configure SSH for GitHub
+
+1. Create a script to set up SSH for GitHub:
+   ```bash
+   cd ~/Developer/setup-scripts
+   nano setup_github_ssh.sh
+   ```
+
+2. Add the following content:
+   ```bash
+   #!/bin/bash
+   
+   # Generate SSH key for GitHub
+   read -p "Enter your email for GitHub SSH key: " GITHUB_EMAIL
+   
+   # Create SSH directory if it doesn't exist
+   mkdir -p ~/.ssh
+   
+   # Generate SSH key
+   ssh-keygen -t ed25519 -C "$GITHUB_EMAIL" -f ~/.ssh/github_ed25519
+   
+   # Add SSH key to SSH agent
+   eval "$(ssh-agent -s)"
+   touch ~/.ssh/config
+   
+   # Configure SSH config
+   cat > ~/.ssh/config << EOF
+   Host github.com
+     AddKeysToAgent yes
+     UseKeychain yes
+     IdentityFile ~/.ssh/github_ed25519
+   EOF
+   
+   # Add SSH key to keychain
+   ssh-add --apple-use-keychain ~/.ssh/github_ed25519
+   
+   # Display public key
+   echo "Your public SSH key is:"
+   echo ""
+   cat ~/.ssh/github_ed25519.pub
+   echo ""
+   echo "Copy this key and add it to your GitHub account:"
+   echo "1. Go to GitHub.com and log in"
+   echo "2. Click your profile picture and select 'Settings'"
+   echo "3. In the left sidebar, click 'SSH and GPG keys'"
+   echo "4. Click 'New SSH key'"
+   echo "5. Add a title, paste your key, and click 'Add SSH key'"
+   
+   # Ask if the user wants to test the connection
+   read -p "Do you want to test the connection to GitHub? (y/n): " TEST_CONNECTION
+   
+   if [ "$TEST_CONNECTION" = "y" ] || [ "$TEST_CONNECTION" = "Y" ]; then
+     ssh -T git@github.com
+   fi
+   
+   echo "SSH key for GitHub has been set up successfully!"
+   ```
+
+3. Make the script executable and run it:
+   ```bash
+   chmod +x setup_github_ssh.sh
+   ./setup_github_ssh.sh
+   ```
+
+## Step 7: Set Up GitHub CLI
+
+1. Install GitHub CLI:
+   ```bash
+   brew install gh
+   ```
+
+2. Authenticate with GitHub:
+   ```bash
+   gh auth login
+   ```
+
+3. Follow the prompts to complete the authentication process.
+
+## Step 8: Set Up VS Code Dev Containers Configuration
+
+1. Create a script to set up VS Code Dev Containers:
+   ```bash
+   cd ~/Developer/setup-scripts
+   nano setup_vscode_devcontainers.sh
+   ```
+
+2. Add the following content:
+   ```bash
+   #!/bin/bash
+   
+   # Create directory for .devcontainer templates
+   mkdir -p ~/Developer/vscode-templates
+   
+   # Create Python development container configuration
+   mkdir -p ~/Developer/vscode-templates/python-devcontainer
+   
+   # Create devcontainer.json
+   cat > ~/Developer/vscode-templates/python-devcontainer/devcontainer.json << EOF
+   {
+     "name": "Python Development",
+     "dockerComposeFile": "docker-compose.yml",
+     "service": "app",
+     "workspaceFolder": "/app",
+     "customizations": {
+       "vscode": {
+         "extensions": [
+           "ms-python.python",
+           "ms-python.vscode-pylance",
+           "ms-azuretools.vscode-docker",
+           "ms-python.black-formatter",
+           "matangover.mypy",
+           "ms-toolsai.jupyter",
+           "streetsidesoftware.code-spell-checker",
+           "eamodio.gitlens"
+         ],
+         "settings": {
+           "python.formatting.provider": "black",
+           "python.linting.enabled": true,
+           "python.linting.mypyEnabled": true,
+           "editor.formatOnSave": true,
+           "editor.codeActionsOnSave": {
+             "source.organizeImports": true
+           }
+         }
+       }
+     },
+     "remoteUser": "root",
+     "forwardPorts": [8000, 8888],
+     "postCreateCommand": "pip install -r requirements.txt"
+   }
+   EOF
+   
+   # Create docker-compose.yml
+   cat > ~/Developer/vscode-templates/python-devcontainer/docker-compose.yml << EOF
    version: '3.8'
    
    services:
      app:
-       build: ./app
+       build: 
+         context: .
+         dockerfile: Dockerfile
        volumes:
-         - ./app:/app
-       ports:
-         - "8000:8000"
+         - ..:/app
+       command: sleep infinity
        environment:
          - PYTHONUNBUFFERED=1
-       depends_on:
-         - db
-         - redis
-     
-     db:
-       image: postgres:14
-       volumes:
-         - postgres_data:/var/lib/postgresql/data
-       environment:
-         - POSTGRES_USER=postgres
-         - POSTGRES_PASSWORD=postgres
-         - POSTGRES_DB=app
-       ports:
-         - "5432:5432"
-     
-     redis:
-       image: redis:7
-       ports:
-         - "6379:6379"
-   
-   volumes:
-     postgres_data:
    EOF
    
-   echo "Docker Compose templates have been created in ~/Developer/docker-templates"
-   ```
-
-4. Make the script executable and run it:
-   ```
-   chmod +x create_docker_templates.sh
-   ./create_docker_templates.sh
-   ```
-
-## Step 6: Set Up Docker Image Cleanup Script
-
-1. Create a script to periodically clean up unused Docker images:
-   ```
-   cd ~/Developer/setup-scripts
-   nano docker_cleanup.sh
-   ```
-
-2. Add the following content:
-   ```bash
-   #!/bin/bash
-   
-   # Clean up Docker system
-   echo "Cleaning up unused Docker resources..."
-   
-   # Remove all stopped containers
-   docker container prune -f
-   
-   # Remove unused images
-   docker image prune -a -f
-   
-   # Remove unused volumes
-   docker volume prune -f
-   
-   # Remove unused networks
-   docker network prune -f
-   
-   # Display Docker disk usage
-   docker system df
-   
-   echo "Docker cleanup complete!"
-   ```
-
-3. Make the script executable:
-   ```
-   chmod +x docker_cleanup.sh
-   ```
-
-4. Set up a periodic cleanup using crontab:
-   ```
-   (crontab -l 2>/dev/null; echo "0 0 * * 0 ~/Developer/setup-scripts/docker_cleanup.sh >> ~/docker_cleanup.log 2>&1") | crontab -
-   ```
-
-## Step 7: Configure Shell Aliases for Docker and Python Development
-
-1. Create a script to add useful Docker and Python aliases to your shell:
-   ```
-   cd ~/Developer/setup-scripts
-   nano docker_aliases.sh
-   ```
-
-2. Add the following content:
-   ```bash
-   #!/bin/bash
-   
-   # Add Docker and Python development aliases to .zshrc
-   cat >> ~/.zshrc << EOF
-   
-   # Docker aliases
-   alias dps="docker ps"
-   alias dimg="docker images"
-   alias dstop="docker stop \$(docker ps -q)"
-   alias dclean="~/Developer/setup-scripts/docker_cleanup.sh"
-   alias dcomp="docker-compose"
-   alias dcup="docker-compose up"
-   alias dcdown="docker-compose down"
-   alias dcbuild="docker-compose build"
-   alias dcrestart="docker-compose restart"
-   alias dcexec="docker-compose exec"
-   
-   # Python Docker development aliases
-   alias pyinit="~/Developer/python-projects/init_project.sh"
-   alias pybuild="docker-compose build"
-   alias pyrun="docker-compose up"
-   alias pyshell="docker-compose run app bash"
-   alias pytest="docker-compose run app pytest"
-   
-   # Helper functions
-   dexec() {
-     docker exec -it \$1 bash
-   }
-   
-   pynew() {
-     cd ~/Developer/python-projects && ./init_project.sh \$1 && cd \$1
-   }
-   EOF
-   
-   # Source the updated .zshrc file
-   source ~/.zshrc
-   
-   echo "Docker and Python development aliases have been added to .zshrc"
-   ```
-
-3. Make the script executable and run it:
-   ```
-   chmod +x docker_aliases.sh
-   ./docker_aliases.sh
-   ```
-
-## Step 8: Create Python Docker Project Templates
-
-1. Create a directory for specialized Docker templates:
-   ```
-   mkdir -p ~/Developer/docker-templates/python
-   ```
-
-2. Create a data science template:
-   ```
-   cd ~/Developer/docker-templates/python
-   nano Dockerfile.datascience
-   ```
-
-3. Add the following content:
-   ```dockerfile
+   # Create Dockerfile
+   cat > ~/Developer/vscode-templates/python-devcontainer/Dockerfile << EOF
    FROM python:3.12-slim
    
    WORKDIR /app
    
    # Install system dependencies
-   RUN apt-get update && apt-get install -y \
-       build-essential \
-       curl \
-       git \
-       wget \
+   RUN apt-get update && apt-get install -y \\
+       build-essential \\
+       curl \\
+       git \\
        && rm -rf /var/lib/apt/lists/*
    
-   # Install Python data science packages
-   COPY requirements.txt .
-   RUN pip install --no-cache-dir -r requirements.txt
+   # Install Python packages
+   COPY requirements.txt /tmp/
+   RUN pip install --no-cache-dir -r /tmp/requirements.txt
    
-   # Set up Jupyter configuration
-   RUN mkdir -p ~/.jupyter && \
-       echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
-       echo "c.NotebookApp.password = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
-       echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py
+   # Create non-root user
+   ARG USERNAME=vscode
+   ARG USER_UID=1000
+   ARG USER_GID=\$USER_UID
    
-   # Copy source code
-   COPY . .
+   RUN groupadd --gid \$USER_GID \$USERNAME \\
+       && useradd --uid \$USER_UID --gid \$USER_GID -m \$USERNAME
    
-   # Expose Jupyter port
-   EXPOSE 8888
+   # Set the default user
+   USER \$USERNAME
+   EOF
    
-   # Command to run when container starts
-   CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
-   ```
-
-4. Create a requirements file for data science:
-   ```
-   nano requirements.datascience.txt
-   ```
-
-5. Add the following content:
-   ```
-   # Data analysis & machine learning
+   # Create requirements.txt
+   cat > ~/Developer/vscode-templates/python-devcontainer/requirements.txt << EOF
+   # Development tools
+   black
+   isort
+   mypy
+   pytest
+   pytest-cov
+   
+   # Common libraries
    numpy
    pandas
    matplotlib
-   seaborn
-   scikit-learn
-   scipy
-   statsmodels
-   
-   # Deep learning
-   tensorflow
-   torch
-   torchvision
-   transformers
-   
-   # Jupyter
-   jupyter
-   jupyterlab
-   ipywidgets
-   
-   # API clients
    requests
-   anthropic
-   openai
-   
-   # Utilities
    python-dotenv
-   tqdm
+   EOF
+   
+   # Create a script to copy .devcontainer to a project
+   cat > ~/Developer/vscode-templates/add_devcontainer.sh << EOF
+   #!/bin/bash
+   
+   if [ \$# -lt 1 ]; then
+     echo "Usage: \$0 <project_directory> [template_name]"
+     echo "Available templates: python-devcontainer"
+     exit 1
+   fi
+   
+   PROJECT_DIR="\$1"
+   TEMPLATE_NAME="\${2:-python-devcontainer}"
+   
+   # Check if project directory exists
+   if [ ! -d "\$PROJECT_DIR" ]; then
+     echo "Project directory does not exist: \$PROJECT_DIR"
+     exit 1
+   fi
+   
+   # Check if template exists
+   TEMPLATE_DIR=~/Developer/vscode-templates/"\$TEMPLATE_NAME"
+   if [ ! -d "\$TEMPLATE_DIR" ]; then
+     echo "Template does not exist: \$TEMPLATE_NAME"
+     exit 1
+   fi
+   
+   # Create .devcontainer directory in project
+   mkdir -p "\$PROJECT_DIR/.devcontainer"
+   
+   # Copy template files to project
+   cp -r "\$TEMPLATE_DIR"/* "\$PROJECT_DIR/.devcontainer/"
+   
+   echo "Dev Container configuration has been added to \$PROJECT_DIR"
+   echo "Open the project in VS Code and use 'Reopen in Container' to start development"
+   EOF
+   
+   # Make the script executable
+   chmod +x ~/Developer/vscode-templates/add_devcontainer.sh
+   
+   # Create an alias for the script
+   echo "alias add-devcontainer='~/Developer/vscode-templates/add_devcontainer.sh'" >> ~/.zshrc
+   
+   echo "VS Code Dev Containers configuration has been set up successfully!"
+   echo "To add a Dev Container to a project, run: add-devcontainer <project_directory>"
    ```
 
-6. Create a web API template:
-   ```
-   nano Dockerfile.webapi
-   ```
-
-7. Add the following content:
-   ```dockerfile
-   FROM python:3.12-slim
-   
-   WORKDIR /app
-   
-   # Install system dependencies
-   RUN apt-get update && apt-get install -y \
-       build-essential \
-       curl \
-       git \
-       && rm -rf /var/lib/apt/lists/*
-   
-   # Install Python web packages
-   COPY requirements.txt .
-   RUN pip install --no-cache-dir -r requirements.txt
-   
-   # Copy source code
-   COPY . .
-   
-   # Expose API port
-   EXPOSE 8000
-   
-   # Command to run when container starts
-   CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+3. Make the script executable and run it:
+   ```bash
+   chmod +x setup_vscode_devcontainers.sh
+   ./setup_vscode_devcontainers.sh
    ```
 
-8. Create a requirements file for web API:
-   ```
-   nano requirements.webapi.txt
+## Step 9: Set Up .dotfiles Repository
+
+1. Create a script to set up a .dotfiles repository:
+   ```bash
+   cd ~/Developer/setup-scripts
+   nano setup_dotfiles.sh
    ```
 
-9. Add the following content:
-   ```
-   # Web frameworks
-   fastapi
-   uvicorn
-   pydantic
+2. Add the following content:
+   ```bash
+   #!/bin/bash
    
-   # Database
-   sqlalchemy
-   alembic
-   psycopg2-binary
+   # Create dotfiles directory
+   mkdir -p ~/.dotfiles
    
-   # Authentication
-   python-jose
-   passlib
-   bcrypt
+   # Initialize Git repository
+   cd ~/.dotfiles
+   git init
    
-   # Utilities
-   python-multipart
-   python-dotenv
+   # Create README
+   cat > README.md << EOF
+   # Dotfiles
    
-   # API clients
-   requests
-   httpx
-   anthropic
-   openai
+   Personal configuration files for macOS.
    
-   # Testing
-   pytest
-   pytest-cov
+   ## Contents
+   
+   - Shell configuration (.zshrc)
+   - Git configuration (.gitconfig)
+   - Vim configuration (.vimrc)
+   - VSCode settings
+   - Terminal settings
+   EOF
+   
+   # Copy configuration files
+   cp ~/.zshrc ~/.dotfiles/
+   cp ~/.gitconfig ~/.dotfiles/
+   cp ~/.vimrc ~/.dotfiles/ 2>/dev/null || touch ~/.dotfiles/.vimrc
+   
+   # Copy VS Code settings
+   mkdir -p ~/.dotfiles/vscode
+   cp ~/Library/Application\ Support/Code/User/settings.json ~/.dotfiles/vscode/
+   cp ~/Library/Application\ Support/Code/User/keybindings.json ~/.dotfiles/vscode/
+   
+   # Create script to install dotfiles
+   cat > install.sh << EOF
+   #!/bin/bash
+   
+   # Create symbolic links
+   ln -sf \$(pwd)/.zshrc ~/.zshrc
+   ln -sf \$(pwd)/.gitconfig ~/.gitconfig
+   ln -sf \$(pwd)/.vimrc ~/.vimrc
+   
+   # Copy VS Code settings
+   mkdir -p ~/Library/Application\ Support/Code/User
+   cp \$(pwd)/vscode/settings.json ~/Library/Application\ Support/Code/User/
+   cp \$(pwd)/vscode/keybindings.json ~/Library/Application\ Support/Code/User/
+   
+   echo "Dotfiles installed successfully!"
+   EOF
+   
+   # Make install script executable
+   chmod +x install.sh
+   
+   # Initial commit
+   git add .
+   git commit -m "Initial commit"
+   
+   echo "Dotfiles repository has been set up successfully!"
+   echo "To track additional files, copy them to ~/.dotfiles and add them to Git."
    ```
 
-10. Create a template script to initialize projects:
-    ```
-    nano create_python_project.sh
-    ```
+3. Make the script executable and run it:
+   ```bash
+   chmod +x setup_dotfiles.sh
+   ./setup_dotfiles.sh
+   ```
 
-11. Add the following content:
-    ```bash
-    #!/bin/bash
-    
-    # Check if arguments are provided
-    if [ $# -lt 2 ]; then
-      echo "Usage: $0 <project_name> <template_type>"
-      echo "Template types: datascience, webapi"
-      exit 1
-    fi
-    
-    PROJECT_NAME="$1"
-    TEMPLATE_TYPE="$2"
-    PROJECT_DIR=~/Developer/python-projects/$PROJECT_NAME
-    
-    # Check if template type is valid
-    if [ "$TEMPLATE_TYPE" != "datascience" ] && [ "$TEMPLATE_TYPE" != "webapi" ]; then
-      echo "Invalid template type. Use datascience or webapi."
-      exit 1
-    fi
-    
-    # Create project directory
-    mkdir -p $PROJECT_DIR
-    cd $PROJECT_DIR
-    
-    # Copy template files
-    cp ~/Developer/docker-templates/python/Dockerfile.$TEMPLATE_TYPE ./Dockerfile
-    cp ~/Developer/docker-templates/python/requirements.$TEMPLATE_TYPE.txt ./requirements.txt
-    
-    # Create docker-compose.yml based on template type
-    if [ "$TEMPLATE_TYPE" = "datascience" ]; then
-      cat > docker-compose.yml << EOF
-    version: '3.8'
-    
-    services:
-      notebook:
-        build: .
-        volumes:
-          - .:/app
-        ports:
-          - "8888:8888"
-        environment:
-          - PYTHONUNBUFFERED=1
-    EOF
-    elif [ "$TEMPLATE_TYPE" = "webapi" ]; then
-      cat > docker-compose.yml << EOF
-    version: '3.8'
-    
-    services:
-      api:
-        build: .
-        volumes:
-          - .:/app
-        ports:
-          - "8000:8000"
-        environment:
-          - PYTHONUNBUFFERED=1
-        depends_on:
-          - db
-      
-      db:
-        image: postgres:14
-        volumes:
-          - postgres_data:/var/lib/postgresql/data
-        environment:
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=postgres
-          - POSTGRES_DB=$PROJECT_NAME
-        ports:
-          - "5432:5432"
-    
-    volumes:
-      postgres_data:
-    EOF
-    fi
-    
-    # Create project structure based on template type
-    if [ "$TEMPLATE_TYPE" = "datascience" ]; then
-      mkdir -p notebooks
-      mkdir -p data
-      mkdir -p scripts
-      
-      # Create example notebook
-      cat > notebooks/example.ipynb << EOF
-    {
-     "cells": [
-      {
-       "cell_type": "markdown",
-       "metadata": {},
-       "source": [
-        "# $PROJECT_NAME\n",
-        "\n",
-        "Example analysis notebook."
-       ]
-      },
-      {
-       "cell_type": "code",
-       "execution_count": null,
-       "metadata": {},
-       "source": [
-        "import numpy as np\n",
-        "import pandas as pd\n",
-        "import matplotlib.pyplot as plt\n",
-        "import seaborn as sns\n",
-        "\
+## Summary
+
+This setup guide provides a comprehensive approach to setting up VS Code and GitHub on your MacBook Pro M3 Max. The key components include:
+
+1. **VS Code Installation and Configuration** with essential extensions and optimized settings
+2. **Git Configuration** with useful aliases and a global gitignore file
+3. **GitHub SSH Key Setup** for secure authentication
+4. **GitHub CLI Installation** for command-line interaction with GitHub
+5. **VS Code Dev Containers Configuration** for isolated development environments
+6. **Dotfiles Repository Setup** for backing up and syncing your configuration
+
+These steps will provide you with a powerful development environment that is ready for integration with Docker for containerized development.
+
+## Usage Examples
+
+### Add Dev Container to an Existing Project
+
+```bash
+add-devcontainer ~/Developer/my-project
+```
+
+### Clone a GitHub Repository
+
+```bash
+gh repo clone owner/repository
+```
+
+### Create a New GitHub Repository
+
+```bash
+gh repo create my-new-repo --public
+```
+
+### Initialize a Git Repository and Push to GitHub
+
+```bash
+cd my-project
+git init
+git add .
+git commit -m "Initial commit"
+gh repo create my-project --source=. --public
+git push -u origin main
+```
