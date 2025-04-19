@@ -12,7 +12,8 @@ brew install --cask sublime-text
 brew install --cask microsoft-word
 brew install --cask microsoft-excel
 brew install --cask microsoft-powerpoint
-
+brew install --cask chatgpt
+brew install --cask claude
 
 # Set Sublime Text as the default text editor
 duti -s com.sublimetext.4 public.plain-text all
