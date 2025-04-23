@@ -1,0 +1,7 @@
+Backup created on: Tue Apr 22 19:59:25 PDT 2025
+macOS version: 15.4.1
+Hostname: Nirs-MacBook-Air.local
+ZSH version: zsh 5.9 (arm64-apple-darwin24.0)
+Shell: /bin/zsh
+Oh My ZSH: Installed
+Oh My ZSH Theme: half-life
