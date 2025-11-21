@@ -717,7 +717,6 @@ Install essential applications for productivity.
 # Browsers
 brew install --cask google-chrome
 brew install --cask brave-browser
-brew install --cask firefox
 
 # Editors & IDEs
 brew install --cask visual-studio-code
@@ -728,8 +727,8 @@ brew install --cask slack
 
 # AI & Utilities
 brew install --cask chatgpt
+brew install --cask claude
 brew install --cask raycast
-brew install --cask bartender
 brew install --cask appcleaner
 brew install --cask hiddenbar
 brew install --cask grammarly

@@ -57,7 +57,7 @@ This repository provides a **4-Phase automated setup process** to transform a cl
 - 1Password (password manager)
 - 1Password CLI
 - Git & GitHub CLI
-- This repository (Mac-Setting)
+- Mac-Setting repository (setup scripts & guides)
 
 ### How to Run
 
@@ -131,11 +131,11 @@ Once Phase 1 completes successfully, you'll be prompted to:
 - Menu bar and Control Center (Tahoe features)
 
 **Applications Installed:**
-- Browsers: Google Chrome, Brave, Firefox
+- Browsers: Google Chrome, Brave
 - Editors: VS Code, Sublime Text
 - Communication: Slack
 - AI Tools: ChatGPT, Claude
-- Utilities: Raycast, Bartender, AppCleaner, HiddenBar, Grammarly
+- Utilities: Raycast, AppCleaner, HiddenBar, Grammarly
 
 ### How to Run
 
