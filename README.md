@@ -1,409 +1,490 @@
-# Clean Install macOS Sonoma on MacBook Pro M3 Max
+# Mac-Setting: macOS Tahoe Setup & Configuration Guide
 
-This guide provides step-by-step instructions for wiping and reinstalling a clean version of macOS Sonoma on your MacBook Pro M3 Max with 36 GB of RAM.
+Complete automation toolkit for setting up a fresh macOS Tahoe installation on Apple Silicon Macs (M3 Max, M4 MacBook Air, etc.).
 
-## Before You Begin
+## Quick Overview
 
-- Ensure your MacBook is connected to a power source throughout this process.
-- Make sure you have a stable internet connection.
+This repository provides a **4-Phase automated setup process** to transform a clean macOS Tahoe installation into a fully configured development environment:
 
-## Step 1: Back Up Your Data
+1. **Phase 1: Bootstrap** - Install essentials (Homebrew, 1Password, GitHub CLI, clone this repo)
+2. **Phase 2: Basic Settings** - System preferences, terminal, Finder, Dock, productivity apps
+3. **Phase 3: Development** - Python, Docker, Docker Compose, Ollama + Open WebUI, LLM tools
+4. **Phase 4: Optional** - Parallels Desktop & Windows gaming environment (coming soon)
 
-1. Connect an external hard drive to your MacBook.
-2. Open Time Machine from System Settings.
-3. Select your external drive as the backup disk.
-4. Click "Back Up Now" and wait for the process to complete.
+---
 
-## Step 2: Sign Out of Apple Services
+## 🚀 Quick Start
 
-1. Open the Apple menu and go to System Settings.
-2. Click on your Apple ID at the top.
-3. Scroll down and click "Sign Out".
-4. Follow the prompts to turn off Find My Mac.
+### Before You Begin
 
-## Step 3: Erase Your MacBook
+- **macOS Tahoe (version 26.x)** installed and fully updated
+- Clean installation (or willing to back up existing configurations)
+- Administrator access
+- Stable internet connection
+- External drive for backups (recommended)
 
-1. Restart your MacBook and immediately press and hold the power button until you see the startup options.
-2. Select "Options" and click "Continue".
-3. Choose a language if prompted.
-4. Select "Disk Utility" and click "Continue".
-5. In Disk Utility, select "Macintosh HD" in the sidebar.
-6. Click "Erase" at the top of the window.
-7. Name: Macintosh HD
-   Format: APFS
-   Scheme: GUID Partition Map
-8. Click "Erase".
-9. If you have other internal volumes, repeat steps 5-8 for each.
-10. Once done, close Disk Utility.
+### The Installation Flow
 
-## Step 4: Reinstall macOS Sonoma
+```
+┌─────────────────────────────────────────┐
+│  Clean macOS Tahoe Installation         │
+├─────────────────────────────────────────┤
+│  Phase 1: Bootstrap                     │
+│  Run: phase-1-bootstrap.sh              │
+│  ↓ Installs Homebrew, 1Password, GitHub │
+│  ↓ Clones this repo                     │
+├─────────────────────────────────────────┤
+│  Phase 2: Basic Settings                │
+│  Run: phase-2-basic-settings.sh         │
+│  ↓ Terminal, Finder, Dock, Productivity │
+├─────────────────────────────────────────┤
+│  Phase 3: Development Environment       │
+│  Run: phase-3-development.sh            │
+│  ↓ Python, Docker, LLM, AI Tools        │
+├─────────────────────────────────────────┤
+│  Mac Fully Configured! ✅               │
+└─────────────────────────────────────────┘
+```
 
-1. In the macOS Recovery window, select "Reinstall macOS Sonoma".
-2. Click "Continue" and follow the on-screen instructions.
-3. Select "Macintosh HD" as the installation destination.
-4. Wait for the installation to complete. Your Mac may restart several times.
+---
 
-## Step 5: Set Up Your Mac
+## 📋 Phase 1: Bootstrap Installation
 
-1. Once the installation is complete, your Mac will restart.
-2. Follow the setup assistant to configure your new macOS installation.
-3. Choose whether to restore from your Time Machine backup or set up as a new Mac.
+**Duration:** ~10-15 minutes
 
-## Step 6: Verify and Update
+### What Gets Installed
+- Homebrew (macOS package manager)
+- 1Password (password manager)
+- 1Password CLI
+- Git & GitHub CLI
+- This repository (Mac-Setting)
 
-1. Once setup is complete, check System Settings > General > Software Update to ensure you have the latest version of macOS Sonoma.
-2. Install any available updates.
+### How to Run
 
-Congratulations! You now have a clean installation of macOS Sonoma on your MacBook Pro M3 Max.
+Open Terminal and run:
 
-## Step 7: Configure Finder Settings
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/sheepnir/Mac-Setting/main/Scripts/phase-1-bootstrap.sh)"
+```
 
-After completing the clean install and initial setup, you can configure your Finder settings using a custom script. Follow these steps:
+Or if you prefer to download and review first:
 
-1. Open a Terminal and Create a folder Developer in the home folder.
-2. Copy and paste the following script into a new file:
+```bash
+# Download the script
+curl -o phase-1-bootstrap.sh https://raw.githubusercontent.com/sheepnir/Mac-Setting/main/Scripts/phase-1-bootstrap.sh
 
-   ```bash
-   #!/bin/bash
+# Make it executable
+chmod +x phase-1-bootstrap.sh
 
-   # Set Finder view to List
-   defaults write com.apple.Finder FXPreferredViewStyle -string "Nlsv"
+# Review it
+cat phase-1-bootstrap.sh
 
-   # Sort by Date Added
-   defaults write com.apple.Finder FXArrangeGroupViewBy -string "dateAdded"
+# Run it
+./phase-1-bootstrap.sh
+```
 
-   # Show toolbar
-   defaults write com.apple.Finder ShowToolbar -bool true
+### What Happens During Phase 1
 
-   # Show path bar
-   defaults write com.apple.Finder ShowPathbar -bool true
+1. Checks for Homebrew, installs if missing
+2. Installs 1Password app and CLI
+3. Installs Git and GitHub CLI
+4. Configures Git with your user information
+5. Clones the Mac-Setting repository to `~/Developer/Mac-Setting`
+6. Displays next steps to continue
 
-   # Show status bar
-   defaults write com.apple.Finder ShowStatusBar -bool true
+### Next Step
 
-   # Show hidden files
-   defaults write com.apple.Finder AppleShowAllFiles -bool true
+Once Phase 1 completes successfully, you'll be prompted to:
 
-   # Show all file extensions
-   defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+```bash
+# Run Phase 2
+~/Developer/Mac-Setting/Scripts/phase-2-basic-settings.sh
+```
 
-   # When performing a search, search the current folder by default
-   defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+---
 
-   # Set sidebar items
-   defaults write com.apple.finder sidebar-items -dict-add \
-       AirDrop -dict-add ShowInSidebar -bool true \
-       Applications -dict-add ShowInSidebar -bool true \
-       Desktop -dict-add ShowInSidebar -bool true \
-       Documents -dict-add ShowInSidebar -bool true \
-       Downloads -dict-add ShowInSidebar -bool true \
-       HomeDirectory -dict-add ShowInSidebar -bool true \
-       iCloud -dict-add ShowInSidebar -bool true \
-       NetworkDiskMode -dict-add ShowInSidebar -bool true
+## ⚙️ Phase 2: Basic Settings & Essential Tools
 
-   # Uncheck all tags in sidebar
-   defaults write com.apple.finder ShowRecentTags -bool false
+**Duration:** ~20-30 minutes
 
-   # New Finder windows show Downloads
-   defaults write com.apple.finder NewWindowTarget -string "PfLo"
-   defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
+### What Gets Configured
 
-   # Restart Finder to apply changes
-   killall Finder
+**System Settings:**
+- Finder: List view, show hidden files, show extensions
+- Finder sidebar: Custom layout
+- Dock: Custom app arrangement with Applications and Downloads folders
+- Terminal: ZSH with Oh My Zsh framework
+- Menu bar and Control Center (Tahoe features)
 
-   echo "Finder preferences have been updated successfully!"
-   ```
+**Applications Installed:**
+- Browsers: Google Chrome, Brave, Firefox
+- Editors: VS Code, Sublime Text
+- Communication: Slack
+- AI Tools: ChatGPT, Claude
+- Utilities: Raycast, Bartender, AppCleaner, HiddenBar, Grammarly
 
-3. Save the file with a `.sh` extension (e.g., `setup_finder.sh`) in a location you can easily access, such as your Desktop.
-4. Open Terminal (you can find it in Applications > Utilities or use Spotlight to search for it).
-5. In Terminal, navigate to the directory where you saved the script. If you saved it on your Desktop, you can use this command:
-   ```
-   cd ~/Desktop
-   ```
-6. Make the script executable by running:
-   ```
-   chmod +x setup_finder.sh
-   ```
-7. Run the script with:
-   ```
-   ./setup_finder.sh
-   ```
-8. You may be prompted to enter your administrator password. This is necessary because the script modifies system settings.
-9. After the script runs, your Finder will restart with the new settings applied.
+### How to Run
 
-This script will configure Finder with the following settings:
+```bash
+~/Developer/Mac-Setting/Scripts/phase-2-basic-settings.sh
+```
 
-- View as a List
-- Sort by Date Added
-- Show toolbar, path bar, and status bar
-- Show hidden files
-- Show all file extensions
-- When performing a search, search the current folder
-- Set the sidebar to show only: AirDrop, Applications, Desktop, Documents, Downloads, Home folder, iCloud Drive, and Shared
-- Uncheck all tags in the sidebar
-- New Finder windows will show the Downloads folder
+### What This Script Does
 
-## Step 8: Install Homebrew
+Automatically runs these in order:
+1. Terminal & ZSH setup (restores backed-up configs)
+2. Finder preferences
+3. Dock customization
+4. Oh My Zsh framework installation
+5. Productivity tools installation
 
-After setting up Finder, we'll install Homebrew, which is a package manager for macOS. This process will also install Xcode Command Line Tools if they're not already installed.
+### After Phase 2 Completes
 
-1. Open Terminal (you can find it in Applications > Utilities or use Spotlight to search for it).
+Your Mac now has:
+- ✅ Customized terminal with ZSH and Oh My Zsh
+- ✅ Finder in list view with custom sidebar
+- ✅ Clean Dock with essential apps
+- ✅ All productivity tools installed and ready
 
-2. Install Homebrew by running the following command:
+**Next step:** Run Phase 3
 
-   ```
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
+```bash
+~/Developer/Mac-Setting/Scripts/phase-3-development.sh
+```
 
-3. Follow the prompts in the Terminal. You may be asked to enter your password.
+---
 
-4. After the installation is complete, you might need to add Homebrew to your PATH. The installation script will tell you if this is necessary and provide the commands to do so. Typically, for Apple Silicon Macs, you'll need to run these commands:
+## 🛠️ Phase 3: Development Environment
 
-   ```
-   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-   eval "$(/opt/homebrew/bin/brew shellenv)"
-   ```
+**Duration:** ~30-45 minutes
 
-5. Verify the installation by running:
-   ```
-   brew --version
-   ```
-   If Homebrew is installed correctly, this command will return the version number.
+### What Gets Installed
 
-## Step 9: Install 1Password
+**Languages & Runtimes:**
+- Python (via Homebrew)
+- Common Python packages for development
+- Node.js (optional)
 
-Now that Homebrew is installed, we can use it to install 1Password.
+**Development Tools:**
+- Docker Desktop for Mac
+- Docker Compose
+- Ollama (local LLM runtime)
+- Open WebUI (web interface for local LLMs)
 
-1. In Terminal, run the following command to install 1Password:
+**AI & ML Packages:**
+- numpy, pandas, matplotlib, seaborn
+- scikit-learn, jupyter
+- torch (PyTorch)
+- tensorflow
+- transformers, nltk, spacy, gensim
+- anthropic, openai (API clients)
+- python-dotenv
 
-   ```
-   brew install --cask 1password
-   ```
+### How to Run
 
-2. Follow any on-screen prompts to complete the installation.
+```bash
+~/Developer/Mac-Setting/Scripts/phase-3-development.sh
+```
 
-3. Once installed, launch 1Password and sign in to your account.
+### Available Commands After Installation
 
-## Step 10: Create Setup Scripts Folder
+```bash
+# Python
+python3 --version
+pip install package_name
 
-We'll create a dedicated folder to store our setup scripts.
+# Create virtual environments
+python3 -m venv myenv
+source myenv/bin/activate
 
-1. In Terminal, run the following commands to create the folder and navigate to it:
-   ```
-   mkdir -p /home/developer/setup-scripts
-   cd /home/developer/setup-scripts
-   ```
+# Docker
+docker --version
+docker run hello-world
 
+# Ollama (local LLMs)
+ollama pull llama2
+ollama run llama2
 
-## Step 13: Install and Configure Oh My Zsh
+# Open WebUI (after Ollama)
+docker run -d -p 3000:8080 ghcr.io/open-webui/open-webui:latest
+# Then visit: http://localhost:3000
+```
 
-Oh My Zsh is a framework for managing your Zsh configuration. We'll install it and set up the theme and plugins you specified.
+### After Phase 3 Completes
 
-1. First, let's create a script to automate the Oh My Zsh installation and configuration. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+Your Mac now has a complete development environment with:
+- ✅ Python with data science libraries
+- ✅ Docker for containerized applications
+- ✅ Local LLM capabilities (Ollama)
+- ✅ Web UI for interacting with local models
+- ✅ All tools for AI/ML development
 
-   ```
-   nano setup_ohmyzsh.sh
-   ```
+---
 
-2. In the nano editor, paste the following script:
+## 📚 Additional Documentation
 
-   ```bash
-   #!/bin/bash
+### For More Details
 
-   # Install Oh My Zsh
-   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+- **[PRE-INSTALLATION.md](./PRE-INSTALLATION.md)** - Backup and clean install instructions
+- **[POST-INSTALL-STEPS.md](./POST-INSTALL-STEPS.md)** - Detailed post-installation verification and customization
+- **[DEVELOPMENT-SETUP.md](./DEVELOPMENT-SETUP.md)** - Deep dive into development tools and how to use them
 
-   # Set the theme
-   sed -i '' 's/ZSH_THEME="robbyrussell"/ZSH_THEME="half-life"/' ~/.zshrc
+### Configuration Backup
 
-   # Set the plugins
-   sed -i '' 's/plugins=(git)/plugins=(git macos web-search)/' ~/.zshrc
+All your backed-up configurations are stored in `/Configs`:
+- `zsh/` - ZSH configuration files
+- `terminal/` - Terminal and iTerm2 preferences
+- `oh-my-zsh/` - Custom themes and plugins
+- `backup-metadata.txt` - Info about the backup source
 
-   # Source the updated .zshrc file
-   source ~/.zshrc
+### Specialized Guides
 
-   echo "Oh My Zsh has been installed and configured!"
-   ```
+- **[GenAI/localLLM.md](./GenAI/localLLM.md)** - Complete guide to Ollama, Open WebUI, and local LLM models
+- **[Python_Setup/setup.md](./Python_Setup/setup.md)** - Python virtual environments and package management
 
-3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+---
 
-4. Make the script executable by running:
+## 🔧 Manual Customization (After Installation)
 
-   ```
-   chmod +x setup_ohmyzsh.sh
-   ```
+After running the automated scripts, you may want to customize:
 
-5. Run the Oh My Zsh setup script:
+### Dock Customization
 
-   ```
-   ./setup_ohmyzsh.sh
-   ```
+Edit `Scripts/update_dock.sh` to change which apps appear in your Dock.
 
-6. The script will install Oh My Zsh, set the theme to "half-life", and add the git, macos, and web-search plugins.
+### Terminal Theme
 
-7. After the script finishes, close and reopen your Terminal to see the changes take effect.
+Change ZSH theme in `~/.zshrc`:
+```bash
+# Current theme: half-life
+ZSH_THEME="half-life"
 
-This script does the following:
+# Change to another theme (e.g., "robbyrussell")
+ZSH_THEME="robbyrussell"
+source ~/.zshrc
+```
 
-- Installs Oh My Zsh
-- Sets the ZSH_THEME to "half-life"
-- Configures the plugins to include git, macos, and web-search
-- Sources the updated .zshrc file to apply the changes
+### System Preferences (Tahoe Features)
 
-Your Terminal should now be using the Oh My Zsh framework with the specified theme and plugins.
+- **Menu Bar**: System Settings > Control Center - Customize what appears in menu bar
+- **Dock**: System Settings > Dock & Menu Bar
+- **Finder**: System Settings > Finder
+- **App Icons**: Right-click app > Options > Tint (Light/Dark/Clear)
 
-## Step 14: Install Utilities
+### Folder Colors & Emoji
 
-We'll now install several useful utilities using Homebrew.
+Right-click any folder > Customize Tags to add colors and emoji to organize your files.
 
-1. Create a new script to install the utilities. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+---
 
-   ```
-   nano install_utilities.sh
-   ```
+## 🆘 Troubleshooting
 
-2. In the nano editor, paste the following script:
+### Phase 1 Issues
 
-   ```bash
-   #!/bin/bash
+**Problem:** Homebrew installation fails
+```bash
+# Try manual installation
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
-   # Install utilities using Homebrew
-   brew install --cask warp
-   brew install --cask google-chrome
-   brew install --cask brave-browser
-   brew install --cask chatgpt
-   brew install --cask visual-studio-code
-   brew install --cask slack
-   brew install --cask zoom
+**Problem:** GitHub CLI authentication fails
+```bash
+# Manually authenticate
+gh auth login
+```
 
-   echo "Utilities have been installed successfully!"
-   ```
+### Phase 2 Issues
 
-3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+**Problem:** Terminal theme not applied
+```bash
+# Reload ZSH
+exec zsh
+# Or
+source ~/.zshrc
+```
 
-4. Make the script executable by running:
+**Problem:** Finder changes didn't apply
+```bash
+# Restart Finder
+killall Finder
+```
 
-   ```
-   chmod +x install_utilities.sh
-   ```
+### Phase 3 Issues
 
-5. Run the utilities installation script:
-   ```
-   ./install_utilities.sh
-   ```
+**Problem:** Docker won't start
+- Open Docker.app from Applications
+- Wait for it to fully initialize
+- Then try again
 
+**Problem:** Ollama won't download models
+- Check internet connection
+- Ensure Docker is running
+- Try manual: `ollama pull llama2`
 
-## Step 18: Install Productivity Tools
+### General Issues
 
-We'll now install several productivity tools and set some system defaults.
+Check the `POST-INSTALL-STEPS.md` for verification commands to test each phase.
 
-1. Create a new script to install the productivity tools. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+---
 
-   ```
-   nano install_productivity_tools.sh
-   ```
+## 📦 What's in This Repository
 
-2. In the nano editor, paste the following script:
+```
+Mac-Setting/
+├── README.md (this file)
+├── PRE-INSTALLATION.md
+├── POST-INSTALL-STEPS.md
+├── DEVELOPMENT-SETUP.md
+├── Scripts/
+│   ├── phase-1-bootstrap.sh
+│   ├── phase-2-basic-settings.sh
+│   ├── phase-3-development.sh
+│   ├── 1Password_GH_setup.sh
+│   ├── terminal_settings.sh
+│   ├── setup_finder.sh
+│   ├── setup_ohmyzsh.sh
+│   ├── update_dock.sh
+│   └── prducttivity_tools_install.sh
+├── Configs/
+│   ├── zsh/ (backed-up configs)
+│   ├── terminal/
+│   ├── oh-my-zsh/
+│   └── backup-metadata.txt
+├── GenAI/
+│   └── localLLM.md
+├── Python_Setup/
+│   └── setup.md
+└── ARCHIVE/ (old documentation)
+```
 
-   [Insert the productivity-tools-install-script here]
+---
 
-3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+## 🔒 Security & Privacy
 
-4. Make the script executable by running:
+### Sensitive Information
+- **Do NOT commit** `.env` files, API keys, or credentials
+- **Use 1Password** for storing sensitive data (configured during Phase 1)
+- **Use 1Password CLI** to securely access credentials from scripts
 
-   ```
-   chmod +x install_productivity_tools.sh
-   ```
+### Git Configuration
+After Phase 1, Git is configured with:
+- **User:** Nir Sheep
+- **Email:** sheep.nir@gmail.com
 
-5. Before running the script, we need to install `duti`, which is used to set default applications. Run:
+Update these if needed:
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+```
 
-   ```
-   brew install duti
-   ```
+---
 
-6. Run the productivity tools installation script:
-   ```
-   ./install_productivity_tools.sh
-   ```
+## 🆙 Updating This Repository
 
-This script will:
+To get the latest configurations and scripts:
 
-- Install the following applications using Homebrew:
-  - Firefox
-  - Evernote
-  - Raycast
-  - Bartender
-  - AppCleaner
-  - AlDente
-  - Grammarly
-  - Sublime Text
-  - Microsoft Word, Excel, and PowerPoint
-- Set Brave as the default browser
-- Set Sublime Text as the default text editor for plain text files, Unix executables, and source code files
+```bash
+cd ~/Developer/Mac-Setting
+git pull origin main
+```
 
-Note: Setting default applications might require you to confirm the changes in System Settings > Desktop & Dock > Default web browser and System Settings > Desktop & Dock > Default app for opening documents.
+---
 
-After running the script, you may need to restart your computer or log out and log back in for all changes to take effect.
+## 📝 System Requirements
 
-## Step 19: Set Up Python for Development
+- **macOS Version:** Tahoe (26.0) or later
+- **Architecture:** Apple Silicon (M1, M2, M3, M4, etc.)
+- **RAM:** 8GB minimum (16GB+ recommended for development)
+- **Disk Space:** 50GB+ free space
+- **Internet:** Required for downloads (10+ GB total)
 
-We'll now set up Python for development using Miniconda, which is ideal for data science projects. This setup will work seamlessly with VSCode.
+---
 
-1. Create a new script to set up Python. In Terminal, ensure you're in the `/home/developer/setup-scripts` directory, then run:
+## 💡 Tips & Best Practices
 
-   ```
-   nano setup_python_dev.sh
-   ```
+### Backup Before Making Changes
+```bash
+# Create a Time Machine backup before major changes
+# System Settings > General > Time Machine
+```
 
-2. In the nano editor, paste the following script:
+### Keep Your Config Repo Updated
+After customizing your setup, commit changes:
+```bash
+cd ~/Developer/Mac-Setting
+git add .
+git commit -m "Updated settings"
+git push
+```
 
-   [Insert the updated python-dev-setup-script here]
+### Virtual Environments for Projects
+Always use virtual environments for Python projects:
+```bash
+python3 -m venv myproject
+source myproject/bin/activate
+pip install -r requirements.txt
+```
 
-3. Save the file and exit nano by pressing `Ctrl+X`, then `Y`, then `Enter`.
+### Docker Image Management
+Keep your Docker system clean:
+```bash
+# Remove unused images
+docker image prune -a
 
-4. Make the script executable by running:
+# Remove unused volumes
+docker volume prune
+```
 
-   ```
-   chmod +x setup_python_dev.sh
-   ```
+---
 
-5. Run the Python setup script:
+## 🤝 Contributing
 
-   ```
-   ./setup_python_dev.sh
-   ```
+Found an issue or want to improve something? Great!
 
-6. After the script finishes, close and reopen your terminal or run `source ~/.zshrc` to ensure the conda initialization takes effect.
+1. Create a new branch: `git checkout -b feature/your-feature`
+2. Make your changes
+3. Test thoroughly
+4. Commit with clear message: `git commit -m "Add your feature"`
+5. Push: `git push origin feature/your-feature`
+6. Open a pull request
 
-This script will:
+---
 
-- Install Miniconda using Homebrew
-- Initialize conda for zsh
-- Create a new conda environment called 'testproject' with the latest stable Python version
-- Add conda-forge to the channels for a wider selection of packages
-- Install essential data science packages (numpy, pandas, matplotlib, seaborn, scikit-learn, jupyter) in the 'testproject' environment
-- Attempt to install openai and anthropic packages using conda, falling back to pip if necessary
-- Install the Python and Jupyter extensions for VSCode
+## 📄 License
 
-After running the script:
+These scripts and configurations are provided as-is for personal Mac setup automation.
 
-7. Open VSCode and ensure it recognizes your conda environments:
+---
 
-   - Open the Command Palette (Cmd+Shift+P)
-   - Type "Python: Select Interpreter"
-   - Choose the 'testproject' environment you just created
+## ✅ Support & Issues
 
-8. To start a new Python project in VSCode:
+- Check `POST-INSTALL-STEPS.md` for verification steps
+- Check `DEVELOPMENT-SETUP.md` for tool-specific help
+- Review archived documentation in `ARCHIVE/` for additional context
+- Check individual script comments for detailed information
 
-   - Open a new or existing project folder
-   - Create a new Python file or Jupyter notebook
-   - VSCode should automatically use the 'testproject' environment
+---
 
-9. To activate your test project environment in the terminal, run:
-   ```
-   conda activate testproject
-   ```
+## 🎯 What's Next After Installation?
 
-Remember to activate the 'testproject' environment whenever you're working on your projects. You can create additional environments for other projects as needed.
+After running all 3 phases, your Mac is ready for:
 
-Note: If you need to install additional packages in the future, you can use either `conda install package_name` or `pip install package_name` while your 'testproject' environment is activated.
+- ✅ Web development (Docker, containers, databases)
+- ✅ Python development (data science, ML, AI)
+- ✅ Local AI/LLM experimentation (Ollama)
+- ✅ General development work
+- ✅ Content creation (VS Code, etc.)
+
+**Future additions:**
+- Phase 4: Parallels Desktop & Windows gaming setup
+- Additional language runtimes (Node.js, Rust, Go)
+- Database setup (PostgreSQL, MongoDB)
+- Container orchestration (Kubernetes basics)
+
+---
+
+**Version:** macOS Tahoe (26.x)
+**Last Updated:** November 2025
+**Target Systems:** Apple Silicon Macs (M1+)
+
+Happy coding! 🚀
