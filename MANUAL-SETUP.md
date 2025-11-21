@@ -211,6 +211,23 @@ Your Mac is now clean and ready. Continue to **Phase 1: Bootstrap** below.
 
 ## Phase 1: Bootstrap
 
+**Overview:** In this phase, you'll install the essential tools needed to set up your Mac. By the end, you'll have this repository cloned and ready to use for Phases 2 and 3.
+
+**What you'll install:**
+- Homebrew (macOS package manager)
+- 1Password (password manager with CLI)
+- Git (version control)
+- GitHub CLI (GitHub access from terminal)
+- Mac-Setting repository (these setup scripts)
+
+**Before you start:**
+- Have your 1Password account credentials ready
+- Have your GitHub account login ready
+- Ensure you have internet connectivity
+- Plan for 15-20 minutes
+
+---
+
 ### Step 1: Install Homebrew
 
 Homebrew is the macOS package manager. It's the foundation for installing everything else.
@@ -245,30 +262,84 @@ brew doctor
 # Should show: Your system is ready to brew.
 ```
 
-### Step 2: Install 1Password
+### Step 2: Install & Configure 1Password
 
-1Password is a password manager and will be used to secure credentials.
+1Password is a password manager. You'll use it to securely store credentials and authenticate from the command line.
 
 ```bash
 # Install 1Password app
 brew install --cask 1password
 
-# Install 1Password CLI
+# Install 1Password CLI (command-line tool)
 brew install 1password-cli
 
 # Verify installation
 op --version
+# Should show: 2.X.X or similar
 ```
 
-**Authenticate with 1Password:**
+**Launch 1Password app and sign in:**
+
+The app needs to be configured before the CLI can work:
 
 ```bash
-# Sign in to 1Password
+# Open 1Password app from Applications
+open -a "1Password 7"
+# or
+open -a "1Password 8"
+# or just open Applications and click 1Password
+```
+
+When 1Password opens:
+1. Click "Sign in" (or similar button)
+2. Enter your **1Password account email**
+3. Enter your **1Password master password**
+4. If prompted for 2FA, complete the authentication
+5. Wait for 1Password to fully load
+6. Keep 1Password running in the background (you can minimize it)
+
+**Verify 1Password is accessible:**
+
+```bash
+# Check if 1Password app is running
+pgrep "1Password" | head -1
+# Should return a process ID
+
+# Or check if you can see the menu bar icon
+# Look for "🔐" or "1P" in the top menu bar
+```
+
+**Sign in with 1Password CLI:**
+
+Now that the app is running, you can authenticate the CLI:
+
+```bash
+# Sign in to 1Password CLI
 eval $(op signin)
 
-# Follow the prompts to enter your 1Password credentials
-# This creates a secure session for CLI access
+# You should see output like:
+# export OP_SESSION_my_account=xxxxx
+# (This creates an encrypted session token)
 ```
+
+**Verify CLI authentication:**
+
+```bash
+# Check that you're authenticated
+op whoami
+# Should return your 1Password account information
+
+# Test that you can access your vault
+op vault list
+# Should show your 1Password vaults
+```
+
+**Keep 1Password Running:**
+
+The 1Password CLI needs the 1Password app to be running. You can:
+- Keep it open in the background
+- It will auto-lock after inactivity (you can unlock with your password)
+- Close and reopen as needed
 
 ### Step 3: Install Git & Configure
 
