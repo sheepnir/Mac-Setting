@@ -253,6 +253,7 @@ All your backed-up configurations are stored in `/Configs`:
 
 ### Specialized Guides
 
+- **[DEVELOPMENT-WORKFLOWS.md](./DEVELOPMENT-WORKFLOWS.md)** - Comprehensive development workflows (local & container-based), project setup, and Claude Code usage
 - **[GenAI/localLLM.md](./GenAI/localLLM.md)** - Complete guide to Ollama, Open WebUI, and local LLM models
 - **[Python_Setup/setup.md](./Python_Setup/setup.md)** - Python virtual environments and package management
 

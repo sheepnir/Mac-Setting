@@ -11,6 +11,8 @@ Complete guide to using and configuring your development environment after Phase
 5. [Project Templates](#project-templates)
 6. [Development Workflows](#development-workflows)
 
+**For detailed development workflows, local development, and container-based development, see [DEVELOPMENT-WORKFLOWS.md](./DEVELOPMENT-WORKFLOWS.md)**
+
 ---
 
 ## 🐍 Python Development
@@ -32,12 +34,12 @@ After Phase 3 installation, you have:
 
 ```bash
 # Create a new virtual environment
-python3 -m venv my_project
+python3 -m venv venv
 
 # Activate it
-source my_project/bin/activate
+source venv/bin/activate
 
-# You'll see (my_project) in your prompt
+# You'll see (venv) in your prompt
 
 # Install packages
 pip install requests pandas
@@ -52,8 +54,8 @@ deactivate
 #### Method 2: Quick Project Setup
 
 ```bash
-# Navigate to project directory
-cd ~/my_project
+# Navigate to standard project directory
+cd ~/Developer/MyProject
 
 # Create and activate environment in one go
 python3 -m venv venv && source venv/bin/activate
@@ -62,7 +64,7 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
 # Start developing
-python3 main.py
+python3 src/main.py
 ```
 
 ### Managing Python Packages
@@ -165,9 +167,9 @@ After Phase 3, you have these pre-installed:
 ### Example: Data Science Project
 
 ```bash
-# Create project
-mkdir ~/my_data_project
-cd ~/my_data_project
+# Create project in standard location
+mkdir -p ~/Developer/MyProject
+cd ~/Developer/MyProject
 
 # Create environment
 python3 -m venv venv
@@ -623,6 +625,7 @@ ollama pull mistral  # Re-downloads if newer version exists
    - **Jupyter** (Microsoft)
    - **Black Formatter** (Microsoft)
    - **Pylint** (Microsoft)
+   - **Claude Code** (Anthropic) - AI-powered coding assistant for development workflows
 
 #### Configure Python Interpreter
 
@@ -705,16 +708,20 @@ Open terminal: Ctrl+`
 
 ## 📦 Project Templates
 
+> **📖 See [DEVELOPMENT-WORKFLOWS.md](./DEVELOPMENT-WORKFLOWS.md) for comprehensive project setup guides using the standard `~/Developer/MyProject` location.**
+
 ### Python Web App (Flask)
 
 ```bash
-mkdir my_flask_app && cd my_flask_app
+cd ~/Developer
+mkdir MyProject && cd MyProject
 python3 -m venv venv
 source venv/bin/activate
 
 pip install flask
 
-cat > app.py << 'EOF'
+mkdir src
+cat > src/app.py << 'EOF'
 from flask import Flask
 
 app = Flask(__name__)
@@ -727,14 +734,15 @@ if __name__ == '__main__':
     app.run(debug=True)
 EOF
 
-python3 app.py
+python3 src/app.py
 # Open: http://localhost:5000
 ```
 
 ### Data Science Project
 
 ```bash
-mkdir my_data_project && cd my_data_project
+cd ~/Developer
+mkdir MyProject && cd MyProject
 python3 -m venv venv
 source venv/bin/activate
 
@@ -753,7 +761,8 @@ jupyter notebook
 ### Docker App
 
 ```bash
-mkdir my_docker_app && cd my_docker_app
+cd ~/Developer
+mkdir MyProject && cd MyProject
 
 cat > Dockerfile << 'EOF'
 FROM python:3.11-slim
@@ -781,7 +790,8 @@ docker run my_app
 ### AI/LLM Project
 
 ```bash
-mkdir my_ai_project && cd my_ai_project
+cd ~/Developer
+mkdir MyProject && cd MyProject
 python3 -m venv venv
 source venv/bin/activate
 
@@ -791,7 +801,8 @@ cat > .env << 'EOF'
 ANTHROPIC_API_KEY=your_key_here
 EOF
 
-cat > main.py << 'EOF'
+mkdir src
+cat > src/main.py << 'EOF'
 import os
 from anthropic import Anthropic
 from dotenv import load_dotenv
@@ -810,118 +821,55 @@ message = client.messages.create(
 print(message.content[0].text)
 EOF
 
-python3 main.py
+python3 src/main.py
 ```
 
 ---
 
 ## 🔄 Development Workflows
 
-### Starting a New Project
+> **📖 For comprehensive development workflows including local development, container-based development, and detailed step-by-step guides, please see [DEVELOPMENT-WORKFLOWS.md](./DEVELOPMENT-WORKFLOWS.md)**
+
+This section provides quick reference summaries. The dedicated workflows guide includes:
+
+- **Standard project location**: `~/Developer/MyProject`
+- **Local development workflow**: Complete setup and daily routines
+- **Container-based development**: Docker and Docker Compose for development
+- **Using Claude Code extension**: AI-powered coding assistance
+- **Common development patterns**: Scripts, features, prototyping, CLIs, APIs
+- **Debugging strategies**: Print debugging, interactive debugging, logging
+
+### Quick Start Template
+
+For a new project, see the complete workflow in [DEVELOPMENT-WORKFLOWS.md](./DEVELOPMENT-WORKFLOWS.md#initial-project-setup).
+
+Quick reference:
 
 ```bash
-# 1. Create directory
-mkdir ~/my_project
-cd ~/my_project
+# Create project in standard location
+cd ~/Developer
+mkdir MyProject
+cd MyProject
 
-# 2. Initialize git
+# Initialize
 git init
-git config user.name "Nir Sheep"
-git config user.email "sheep.nir@gmail.com"
-
-# 3. Create venv
 python3 -m venv venv
 source venv/bin/activate
 
-# 4. Create initial files
-touch main.py
-touch requirements.txt
-touch README.md
-touch .gitignore
-
-cat > .gitignore << 'EOF'
-venv/
-__pycache__/
-*.pyc
-.env
-.DS_Store
-EOF
-
-# 5. Initial commit
-git add .
-git commit -m "Initial project setup"
-
-# 6. Open in VS Code
+# Start coding
 code .
 ```
 
-### Daily Development Workflow
+### VS Code Debugging
+
+Use F5 to start debugging after setting breakpoints. For detailed debugging strategies, see [DEVELOPMENT-WORKFLOWS.md - Debugging Strategies](./DEVELOPMENT-WORKFLOWS.md#-debugging-strategies).
 
 ```bash
-# Start your day
-cd ~/my_project
-source venv/bin/activate
-
-# Install any new dependencies
-pip install -r requirements.txt
-
-# Pull latest changes
-git pull origin main
-
-# Start your IDE/editor
-code .
-
-# Make changes and commit
-git add .
-git commit -m "Your changes"
-
-# Push to remote
-git push origin main
-
-# When done, deactivate
-deactivate
-```
-
-### Debugging Workflow
-
-```bash
-# Run in VS Code debugger
-# 1. Set breakpoint (click line number)
-# 2. F5 to start debug
-# 3. Step over (F10), step into (F11)
-# 4. Watch variables in debug panel
-# 5. Continue (F5) or stop (Shift+F5)
-
-# Or use command line
-python3 -m pdb main.py
+# CLI debugging
+python3 -m pdb src/main.py
 (Pdb) l        # List code
 (Pdb) n        # Next line
-(Pdb) s        # Step into
 (Pdb) c        # Continue
-(Pdb) p var    # Print variable
-```
-
-### Testing Workflow
-
-```bash
-# Install pytest
-pip install pytest
-
-# Create tests directory
-mkdir tests
-
-# Write tests
-cat > tests/test_main.py << 'EOF'
-def test_addition():
-    assert 2 + 2 == 4
-EOF
-
-# Run tests
-pytest
-
-# Run with coverage
-pip install pytest-cov
-pytest --cov=.
 ```
 
 ---
