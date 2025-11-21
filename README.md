@@ -85,12 +85,26 @@ cat phase-1-bootstrap.sh
 
 ### What Happens During Phase 1
 
-1. Checks for Homebrew, installs if missing
-2. Installs 1Password app and CLI
-3. Installs Git and GitHub CLI
-4. Configures Git with your user information
-5. Clones the Mac-Setting repository to `~/Developer/Mac-Setting`
-6. Displays next steps to continue
+1. **Homebrew** - Checks for Homebrew, installs if missing
+2. **1Password** - Installs 1Password app and CLI
+   - You'll be prompted to open 1Password and sign in
+   - Requires: Your 1Password account email & master password
+3. **Git & GitHub CLI** - Installs Git and GitHub CLI
+   - Configures Git with your user information
+4. **GitHub Authentication** - Authenticates with GitHub
+   - You'll be prompted to run `gh auth login`
+   - Requires: Your GitHub login credentials
+   - Browser-based authentication (can use 2FA)
+5. **Clone Repository** - Clones Mac-Setting to `~/Developer/Mac-Setting`
+6. **Next Steps** - Displays instructions to continue
+
+### Requirements for Phase 1
+
+Before running Phase 1, have these ready:
+- ✅ 1Password account email and master password
+- ✅ GitHub account username and password (or 2FA device)
+- ✅ Internet connection (stable download needed)
+- ✅ ~15 minutes of time
 
 ### Next Step
 
