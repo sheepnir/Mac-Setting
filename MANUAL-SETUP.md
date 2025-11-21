@@ -721,6 +721,7 @@ brew install --cask brave-browser
 # Editors & IDEs
 brew install --cask visual-studio-code
 brew install --cask sublime-text
+brew install --cask cursor
 
 # Communication
 brew install --cask slack

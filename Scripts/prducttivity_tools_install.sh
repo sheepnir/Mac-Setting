@@ -4,11 +4,12 @@
 brew install --cask google-chrome
 brew install --cask brave-browser
 brew install --cask visual-studio-code
+brew install --cask sublime-text
+brew install --cask cursor
 brew install --cask slack
 brew install --cask raycast
 brew install --cask appcleaner
 brew install --cask grammarly
-brew install --cask sublime-text
 brew install --cask chatgpt
 brew install --cask claude
 brew install duti

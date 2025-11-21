@@ -132,7 +132,7 @@ Once Phase 1 completes successfully, you'll be prompted to:
 
 **Applications Installed:**
 - Browsers: Google Chrome, Brave
-- Editors: VS Code, Sublime Text
+- Editors: VS Code, Sublime Text, Cursor
 - Communication: Slack
 - AI Tools: ChatGPT, Claude
 - Utilities: Raycast, AppCleaner, HiddenBar, Grammarly
