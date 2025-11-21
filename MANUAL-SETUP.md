@@ -4,9 +4,208 @@ Complete step-by-step manual instructions for setting up your Mac without using 
 
 ## Table of Contents
 
+0. [Pre-Installation: Backup & Clean Install](#pre-installation-backup--clean-install)
 1. [Phase 1: Bootstrap](#phase-1-bootstrap)
 2. [Phase 2: Basic Settings](#phase-2-basic-settings)
 3. [Phase 3: Development Environment](#phase-3-development-environment)
+
+---
+
+## Pre-Installation: Backup & Clean Install
+
+### Before You Begin
+
+If you're starting with an existing Mac that you want to wipe clean and reinstall macOS Tahoe, follow these steps. If you already have a clean macOS Tahoe installation, skip to [Phase 1: Bootstrap](#phase-1-bootstrap).
+
+### Step 1: Backup Your Existing Mac
+
+**Using Time Machine (Recommended):**
+
+```bash
+# Connect external drive (500GB+ recommended)
+# Open System Settings → General → Time Machine
+# Click "Add Backup Disk" and select your external drive
+# Wait for backup to complete (may take several hours)
+```
+
+**Backup your configurations to this repository:**
+
+```bash
+# Navigate to this repository
+cd ~/Developer/Mac-Setting
+
+# Create backup directory structure
+mkdir -p Configs/zsh
+mkdir -p Configs/oh-my-zsh/custom
+mkdir -p Configs/terminal
+mkdir -p Configs/apps
+
+# Backup ZSH configs
+cp ~/.zshrc Configs/zsh/ 2>/dev/null || true
+cp ~/.zprofile Configs/zsh/ 2>/dev/null || true
+cp ~/.zshenv Configs/zsh/ 2>/dev/null || true
+
+# Backup Oh My Zsh customizations
+if [ -d ~/.oh-my-zsh/custom ]; then
+    cp -R ~/.oh-my-zsh/custom/* Configs/oh-my-zsh/custom/ 2>/dev/null || true
+fi
+
+# Backup Terminal preferences
+cp ~/Library/Preferences/com.apple.Terminal.plist Configs/terminal/ 2>/dev/null || true
+
+# Backup VS Code settings
+if [ -d "$HOME/Library/Application Support/Code/User" ]; then
+    mkdir -p Configs/apps/vscode
+    cp "$HOME/Library/Application Support/Code/User/settings.json" Configs/apps/vscode/ 2>/dev/null || true
+fi
+
+# Backup Homebrew packages list
+if command -v brew &> /dev/null; then
+    brew bundle dump --file=Configs/Brewfile 2>/dev/null || true
+fi
+
+# Create backup metadata
+cat > Configs/backup-metadata.txt << EOF
+# Backup Date: $(date)
+# macOS Version: $(sw_vers -productVersion)
+# System Model: $(system_profiler SPHardwareDataType 2>/dev/null | grep "Model Identifier" | awk '{print $3}')
+# Hostname: $(hostname)
+EOF
+
+echo "✓ Configurations backed up to Configs/ directory"
+```
+
+**Push backup to GitHub:**
+
+```bash
+# Commit your backup
+cd ~/Developer/Mac-Setting
+git add Configs/
+git commit -m "Backup configuration before clean install"
+git push origin main
+
+echo "✓ Backup pushed to GitHub"
+```
+
+### Step 2: Prepare for Clean Installation
+
+**Sign out of Apple services:**
+
+```bash
+# Sign out of iCloud
+# 1. System Settings → Apple ID
+# 2. Scroll down and click "Sign Out"
+# 3. When prompted about Find My Mac, choose your preference
+# 4. Wait for sign-out to complete
+
+# Sign out of Messages (if used)
+# 1. Open Messages
+# 2. Messages menu → Settings → Accounts
+# 3. Select your account and click "Sign Out"
+
+# Deauthorize Music/iTunes (if used)
+# 1. Open Music
+# 2. Account menu → Authorizations → Deauthorize This Computer
+```
+
+**Disconnect external drives:**
+
+```bash
+# Safely eject all external drives
+# Drag drives to trash, or use Terminal:
+diskutil eject /Volumes/DriveNameHere
+
+# Verify they're disconnected
+diskutil list
+```
+
+### Step 3: Boot into Recovery Mode
+
+```bash
+# Shut down your Mac
+# Hold power button for 10 seconds, select "Shut Down"
+
+# Power on and immediately hold Command (⌘) + R
+# Keep holding until you see Apple logo or progress bar
+# Wait for Recovery Mode to load (may take 5-10 minutes)
+```
+
+### Step 4: Erase Your Drive
+
+In Recovery Mode:
+
+```bash
+# In Disk Utility (should open automatically):
+# 1. Select "Macintosh HD" in sidebar
+# 2. Click "Erase" button
+# 3. Set options:
+#    Name: Macintosh HD
+#    Format: APFS
+#    Scheme: GUID Partition Map
+# 4. Click "Erase"
+# 5. Wait for completion
+```
+
+### Step 5: Reinstall macOS Tahoe
+
+In Recovery Mode after erase:
+
+```bash
+# 1. Utilities menu → Reinstall macOS (or similar)
+# 2. Click "Continue"
+# 3. Accept license
+# 4. Select "Macintosh HD" as destination
+# 5. Click "Install"
+# 6. Wait for completion (20-40 minutes)
+# 7. Mac will restart multiple times - DO NOT INTERRUPT
+```
+
+### Step 6: Complete Setup Assistant
+
+After installation:
+
+```bash
+# 1. Follow Setup Assistant prompts
+# 2. Choose language and keyboard
+# 3. Connect to WiFi
+# 4. Sign in with Apple ID (optional but recommended)
+# 5. Create user account
+# 6. When asked about data restoration:
+#    - Choose "Don't transfer information now"
+#    - Or restore from Time Machine backup
+# 7. Complete setup
+
+# Verify clean installation
+sw_vers
+# Should show macOS 26.x (Tahoe)
+```
+
+### Step 7: Get This Repository
+
+Your new Mac is now clean. Get this setup repository:
+
+```bash
+# Open Terminal
+# Create Developer directory
+mkdir -p ~/Developer
+
+# Clone this repository
+cd ~/Developer
+git clone https://github.com/sheepnir/Mac-Setting.git
+
+# Navigate into it
+cd Mac-Setting
+
+# If you pushed a backup, pull your backed-up configs
+git pull origin main
+
+# Verify clone
+ls -la
+```
+
+### You're Ready!
+
+Your Mac is now clean and ready. Continue to **Phase 1: Bootstrap** below.
 
 ---
 
