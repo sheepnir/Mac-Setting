@@ -298,7 +298,7 @@ git config --global user.email
 
 ### Step 4: Install GitHub CLI
 
-GitHub CLI (gh) allows you to interact with GitHub from the terminal.
+GitHub CLI (gh) allows you to interact with GitHub from the terminal and clone repositories securely.
 
 ```bash
 # Install GitHub CLI
@@ -306,46 +306,185 @@ brew install gh
 
 # Verify installation
 gh --version
+# Should show: gh version X.X.X
 ```
 
-**Authenticate with GitHub:**
+### Step 5: Authenticate with GitHub
+
+You need to log in to your GitHub account to clone repositories. GitHub CLI makes this easy and secure.
+
+**Start the authentication process:**
 
 ```bash
-# Start authentication
+# Start GitHub authentication
 gh auth login
-
-# Choose your login method (HTTPS or SSH)
-# Recommended: HTTPS for simplicity
-# Follow the prompts:
-# 1. What is your preferred protocol? → HTTPS
-# 2. Authenticate Git with your GitHub credentials? → yes
-# 3. How would you like to authenticate GitHub CLI? → Login with a web browser
-# 4. Follow the web browser prompts
-
-# Verify authentication
-gh auth status
 ```
 
-### Step 5: Clone Mac-Setting Repository
+**Follow these prompts:**
 
-This repository contains all your configurations and setup scripts.
+```
+? What is your preferred protocol for Git operations on this host? (SSH/HTTPS)
+  → Select: HTTPS (simpler, password-based)
+  → Press Enter
+
+? Authenticate Git with your GitHub credentials? (Y/n)
+  → Select: Y (yes)
+  → Press Enter
+
+? How would you like to authenticate GitHub CLI?
+  → Select: Login with a web browser
+  → Press Enter
+```
+
+**Complete authentication in your web browser:**
+
+1. A browser window will open automatically
+2. Click "Authorize github-cli" (or similar button)
+3. You may need to enter your GitHub password
+4. If you have 2FA enabled, follow those prompts
+5. Return to Terminal - authentication is complete!
+
+**Verify authentication:**
 
 ```bash
-# Create Developer directory
+# Check that you're logged in
+gh auth status
+
+# Should show something like:
+# Logged in to github.com as your-username
+# - Active account: yes
+# - Git operations protocol: https
+# - Token: gists, read:org, repo, workflow
+```
+
+### Step 6: Clone Mac-Setting Repository
+
+Now that you're authenticated, you can clone this repository and get all the setup scripts.
+
+**Create project directory and clone:**
+
+```bash
+# Create Developer directory (standard location)
 mkdir -p ~/Developer
 
 # Navigate to it
 cd ~/Developer
 
-# Clone the repository
+# Clone the Mac-Setting repository
 git clone https://github.com/sheepnir/Mac-Setting.git
 
-# Navigate into it
+# Navigate into the cloned repository
 cd Mac-Setting
 
-# Verify the clone
+# Verify the clone was successful
 ls -la
-# Should show: Scripts/, Configs/, README.md, etc.
+```
+
+**You should see:**
+
+```
+ARCHIVE/
+Configs/
+GenAI/
+Python_Setup/
+Scripts/
+README.md
+MANUAL-SETUP.md
+PRE-INSTALLATION.md
+POST-INSTALL-STEPS.md
+DEVELOPMENT-SETUP.md
+... (other files)
+```
+
+**Verify your Git configuration is correct:**
+
+```bash
+# Check that Git is properly configured
+git config --global user.name
+# Should show: Nir Sheep
+
+git config --global user.email
+# Should show: sheep.nir@gmail.com
+
+# Check that you can access the repository
+git remote -v
+# Should show GitHub URLs for origin
+
+# Check that you're on the main branch
+git branch
+# Should show: * main
+```
+
+**Congratulations!**
+
+You now have:
+- ✅ Homebrew installed (package manager)
+- ✅ 1Password installed (password manager)
+- ✅ Git configured (version control)
+- ✅ GitHub CLI authenticated (GitHub access)
+- ✅ Mac-Setting repository cloned (setup scripts and guides)
+
+You're ready to proceed with Phase 2!
+
+---
+
+### Troubleshooting GitHub Authentication
+
+**Problem: "Not authenticated with GitHub"**
+
+```bash
+# Re-run authentication
+gh auth login
+
+# Or check status
+gh auth status
+```
+
+**Problem: "Permission denied when cloning"**
+
+```bash
+# Make sure you're authenticated
+gh auth status
+
+# If not authenticated, run:
+gh auth login
+
+# Then try cloning again
+git clone https://github.com/sheepnir/Mac-Setting.git
+```
+
+**Problem: "Already logged in but need different account"**
+
+```bash
+# Log out first
+gh auth logout
+
+# Then log back in with new account
+gh auth login
+```
+
+**Problem: "2FA (Two-Factor Authentication) errors"**
+
+When prompted for authentication:
+1. 2FA code is sent to your phone or authenticator app
+2. Enter the code when prompted in the browser
+3. Then authorize the GitHub CLI
+
+If you don't have 2FA set up on GitHub:
+- This flow is simpler (just enter password when prompted)
+- Consider enabling 2FA later for security
+
+**Problem: "Clone failed - repository not found"**
+
+```bash
+# Make sure you're using the correct URL
+# It should be: https://github.com/sheepnir/Mac-Setting.git
+
+# Check that you're authenticated
+gh auth status
+
+# Try cloning with correct URL
+git clone https://github.com/sheepnir/Mac-Setting.git
 ```
 
 ---
