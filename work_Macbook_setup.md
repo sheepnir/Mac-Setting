@@ -85,34 +85,18 @@ exec zsh
 ## Phase 2: Productivity Tools & Development Environment
 
 ### 1. Install Productivity Applications
-**Raycast (spotlight and automation):**
 ```bash
-brew install --cask raycast
+brew install --cask raycast brave-browser claude chatgpt whisper-flow obsidian
 ```
 
-**Brave Browser:**
+Verify installations:
 ```bash
-brew install --cask brave-browser
-```
-
-**Claude Desktop:**
-```bash
-brew install --cask claude
-```
-
-**ChatGPT Desktop:**
-```bash
-brew install --cask chatgpt
-```
-
-**Whisper Flow (transcription):**
-```bash
-brew install --cask whisper-flow
-```
-
-**Obsidian (note-taking):**
-```bash
-brew install --cask obsidian
+which raycast
+which brave-browser
+which claude
+which chatgpt
+which whisper-flow
+which obsidian
 ```
 
 ### 2. Install Claude Code (CLI)
