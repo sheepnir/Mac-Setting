@@ -208,30 +208,7 @@ gh auth login
 brew install git-flow
 ```
 
-### 8. Install Database Tools
-**PostgreSQL:**
-```bash
-brew install postgresql@15
-brew services start postgresql@15
-```
-
-Verify installation:
-```bash
-psql --version
-```
-
-**MongoDB:**
-```bash
-brew install mongodb-community
-brew services start mongodb-community
-```
-
-Verify installation:
-```bash
-mongosh --version
-```
-
-### 9. Install Docker
+### 8. Install Docker
 ```bash
 brew install --cask docker
 ```
@@ -241,28 +218,7 @@ Verify installation:
 docker --version
 ```
 
-### 10. Install Development Tools
-**Postman (API testing):**
-```bash
-brew install --cask postman
-```
-
-**DBeaver (Database GUI):**
-```bash
-brew install --cask dbeaver-community
-```
-
-**Insomnia (REST/GraphQL client):**
-```bash
-brew install --cask insomnia
-```
-
-**JetBrains Toolbox (for IntelliJ, PyCharm, etc.):**
-```bash
-brew install jetbrains-toolbox
-```
-
-### 11. Verify Development Environment
+### 9. Verify Development Environment
 ```bash
 node --version
 npm --version
