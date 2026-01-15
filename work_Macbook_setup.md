@@ -86,7 +86,7 @@ exec zsh
 
 ### 1. Install Productivity Applications
 ```bash
-brew install --cask raycast brave-browser claude chatgpt whisper-flow obsidian
+brew install --cask raycast brave-browser claude chatgpt whisper-flow obsidian shottr typora
 ```
 
 Verify installations:
@@ -97,6 +97,8 @@ which claude
 which chatgpt
 which whisper-flow
 which obsidian
+which shottr
+which typora
 ```
 
 ### 2. Install Claude Code (CLI)
