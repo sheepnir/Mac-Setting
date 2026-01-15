@@ -297,87 +297,7 @@ Reload shell:
 source ~/.zshrc
 ```
 
-### 4. Install Code Linters and Formatters
-**ESLint and Prettier for JavaScript:**
-```bash
-npm install -g eslint prettier
-```
-
-**Black for Python:**
-```bash
-pip3 install black flake8
-```
-
-**Rubocop for Ruby:**
-```bash
-gem install rubocop
-```
-
-### 5. Install Pre-commit Hooks
-```bash
-brew install pre-commit
-```
-
-Create a `.pre-commit-config.yaml` in your project root (example):
-```yaml
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-added-large-files
-
-  - repo: https://github.com/psf/black
-    rev: 22.3.0
-    hooks:
-      - id: black
-```
-
-Install the hook:
-```bash
-pre-commit install
-```
-
-### 6. Install Development Tools
-**Postman (API testing):**
-```bash
-brew install --cask postman
-```
-
-**DBeaver (Database GUI):**
-```bash
-brew install --cask dbeaver-community
-```
-
-**Insomnia (REST/GraphQL client):**
-```bash
-brew install --cask insomnia
-```
-
-**Terminal multiplexer - Tmux:**
-```bash
-brew install tmux
-```
-
-### 7. Install System Optimization Tools
-**htop (system monitoring):**
-```bash
-brew install htop
-```
-
-**Bottom (system monitor):**
-```bash
-brew install bottom
-```
-
-**Disk usage analyzer:**
-```bash
-brew install ncdu
-```
-
-### 8. Install Additional System Tools
+### 4. Install Additional System Tools
 **Karabiner (keyboard customization):**
 ```bash
 brew install --cask karabiner-elements
@@ -388,7 +308,7 @@ brew install --cask karabiner-elements
 brew install --cask alfred
 ```
 
-### 9. Configure macOS Settings for Development
+### 5. Configure macOS Settings for Development
 **Show hidden files in Finder:**
 ```bash
 defaults write com.apple.finder AppleShowAllFiles -bool true
@@ -406,7 +326,7 @@ defaults write -g InitialKeyRepeat -int 15
 defaults write -g KeyRepeat -int 2
 ```
 
-### 10. Set Up Git Advanced Features
+### 6. Set Up Git Advanced Features
 **Configure Git aliases:**
 ```bash
 git config --global alias.st status
@@ -424,14 +344,14 @@ git config --global user.signingkey YOUR_GPG_KEY_ID
 git config --global commit.gpgsign true
 ```
 
-### 11. Create Development Workspace Structure
+### 7. Create Development Workspace Structure
 ```bash
 mkdir -p ~/Developer/projects
 mkdir -p ~/Developer/learning
 mkdir -p ~/Developer/work
 ```
 
-### 12. Final System Update and Cleanup
+### 8. Final System Update and Cleanup
 ```bash
 brew update
 brew upgrade
@@ -439,7 +359,7 @@ brew cleanup
 brew doctor
 ```
 
-### 13. Create System Backup
+### 9. Create System Backup
 **Enable Time Machine:**
 1. Go to System Settings → General → Time Machine
 2. Click "Add Backup Disk"
@@ -449,7 +369,7 @@ brew doctor
 1. Go to System Settings → [Your Name] → iCloud
 2. Enable desired options (Documents, Desktop, Mail, etc.)
 
-### 14. Verify Complete Setup
+### 10. Verify Complete Setup
 ```bash
 echo "=== System Info ==="
 sw_vers
