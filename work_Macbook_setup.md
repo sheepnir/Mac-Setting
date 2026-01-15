@@ -24,7 +24,7 @@ cd Mac-Setting
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Add Homebrew to PATH (if using Apple Silicon):
+Add Homebrew to PATH (Apple Silicon):
 ```bash
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -60,13 +60,18 @@ git config --list --global
 ```
 
 ### 6. Set Up 1Password
-- Download 1Password from the App Store or [1Password website](https://1password.com/downloads/mac/)
-- Launch 1Password from Applications
+```bash
+brew install --cask 1password
+brew install 1password-cli
+```
+
+Launch 1Password from Applications:
 - Sign in with your account credentials
 - Complete the authentication setup
-- Configure 1Password CLI (optional but recommended):
+
+Verify installation:
 ```bash
-brew install 1password-cli
+op --version
 ```
 
 ### 7. Restart Terminal
@@ -77,9 +82,81 @@ exec zsh
 
 ---
 
-## Phase 2: Development Environment Setup
+## Phase 2: Productivity Tools & Development Environment
 
-### 1. Install Node.js and npm
+### 1. Install Productivity Applications
+**Raycast (spotlight and automation):**
+```bash
+brew install --cask raycast
+```
+
+**Brave Browser:**
+```bash
+brew install --cask brave-browser
+```
+
+**Claude Desktop:**
+```bash
+brew install --cask claude
+```
+
+**ChatGPT Desktop:**
+```bash
+brew install --cask chatgpt
+```
+
+**Whisper Flow (transcription):**
+```bash
+brew install --cask whisper-flow
+```
+
+**Obsidian (note-taking):**
+```bash
+brew install --cask obsidian
+```
+
+### 2. Install Claude Code (CLI)
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Verify installation:
+```bash
+claude-code --version
+```
+
+### 3. Install Visual Studio Code
+```bash
+brew install --cask visual-studio-code
+```
+
+Verify installation:
+```bash
+code --version
+```
+
+**Set Up VS Code Extensions:**
+
+Install essential extensions via CLI:
+```bash
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension ms-python.python
+code --install-extension eamodio.gitlens
+code --install-extension ms-azuretools.vscode-docker
+code --install-extension GitHub.Copilot
+```
+
+Or open VS Code and install manually:
+- ESLint
+- Prettier
+- Python
+- GitLens
+- Docker
+- GitHub Copilot
+- Thunder Client or REST Client
+
+### 4. Install Node.js and npm
 ```bash
 brew install node
 ```
@@ -96,7 +173,7 @@ npm install -g yarn
 yarn --version
 ```
 
-### 2. Install Python
+### 5. Install Python
 ```bash
 brew install python
 ```
@@ -113,7 +190,7 @@ python3 -m venv ~/Developer/.venv
 source ~/Developer/.venv/bin/activate
 ```
 
-### 3. Install Ruby
+### 6. Install Ruby
 ```bash
 brew install ruby
 ```
@@ -129,7 +206,7 @@ Verify installation:
 ruby --version
 ```
 
-### 4. Set Up SSH Keys for GitHub
+### 7. Set Up SSH Keys for GitHub
 Generate SSH key:
 ```bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
@@ -160,27 +237,19 @@ Verify SSH connection:
 ssh -T git@github.com
 ```
 
-### 5. Install Visual Studio Code
+### 8. Install Git Tools
+**GitHub CLI:**
 ```bash
-brew install visual-studio-code
+brew install gh
+gh auth login
 ```
 
-Verify installation:
+**git-flow (optional):**
 ```bash
-code --version
+brew install git-flow
 ```
 
-### 6. Install Cursor IDE
-```bash
-brew install cursor
-```
-
-### 7. Install JetBrains Toolbox (for IntelliJ, PyCharm, etc.)
-```bash
-brew install jetbrains-toolbox
-```
-
-### 8. Install Database Tools
+### 9. Install Database Tools
 **PostgreSQL:**
 ```bash
 brew install postgresql@15
@@ -203,12 +272,7 @@ Verify installation:
 mongosh --version
 ```
 
-### 9. Install Docker
-```bash
-brew install docker
-```
-
-Download Docker Desktop from [Docker website](https://www.docker.com/products/docker-desktop) and install manually, or:
+### 10. Install Docker
 ```bash
 brew install --cask docker
 ```
@@ -218,24 +282,25 @@ Verify installation:
 docker --version
 ```
 
-### 10. Install Git Tools
-**GitHub CLI:**
+### 11. Install Development Tools
+**Postman (API testing):**
 ```bash
-brew install gh
-gh auth login
+brew install --cask postman
 ```
 
-**git-flow (optional):**
+**DBeaver (Database GUI):**
 ```bash
-brew install git-flow
+brew install --cask dbeaver-community
 ```
 
-### 11. Install Productivity Applications
+**Insomnia (REST/GraphQL client):**
 ```bash
-brew install --cask slack
-brew install --cask discord
-brew install --cask notion
-brew install --cask figma
+brew install --cask insomnia
+```
+
+**JetBrains Toolbox (for IntelliJ, PyCharm, etc.):**
+```bash
+brew install jetbrains-toolbox
 ```
 
 ### 12. Verify Development Environment
@@ -246,6 +311,7 @@ python3 --version
 ruby --version
 git --version
 docker --version
+code --version
 ```
 
 ---
@@ -397,20 +463,15 @@ brew install bottom
 brew install ncdu
 ```
 
-### 8. Install Productivity Enhancement Tools
-**Raycast (enhanced spotlight and productivity):**
-```bash
-brew install --cask raycast
-```
-
-Or use Alfred:
-```bash
-brew install --cask alfred
-```
-
+### 8. Install Additional System Tools
 **Karabiner (keyboard customization):**
 ```bash
 brew install --cask karabiner-elements
+```
+
+**Alfred (alternative to Raycast, optional):**
+```bash
+brew install --cask alfred
 ```
 
 ### 9. Configure macOS Settings for Development
@@ -456,29 +517,7 @@ mkdir -p ~/Developer/learning
 mkdir -p ~/Developer/work
 ```
 
-### 12. Set Up VS Code Extensions
-Open VS Code and install essential extensions:
-- ESLint
-- Prettier
-- Python
-- GitLens
-- Docker
-- Thunder Client or REST Client
-- GitHub Copilot (optional)
-
-Or install via CLI:
-```bash
-code --install-extension dbaeumer.vscode-eslint
-code --install-extension esbenp.prettier-vscode
-code --install-extension ms-python.python
-code --install-extension eamodio.gitlens
-code --install-extension ms-azuretools.vscode-docker
-```
-
-### 13. Set Up Cursor IDE Extensions
-Similar to VS Code, configure your extensions and preferences for optimal workflow.
-
-### 14. Final System Update and Cleanup
+### 12. Final System Update and Cleanup
 ```bash
 brew update
 brew upgrade
@@ -486,7 +525,7 @@ brew cleanup
 brew doctor
 ```
 
-### 15. Create System Backup
+### 13. Create System Backup
 **Enable Time Machine:**
 1. Go to System Settings → General → Time Machine
 2. Click "Add Backup Disk"
@@ -496,7 +535,7 @@ brew doctor
 1. Go to System Settings → [Your Name] → iCloud
 2. Enable desired options (Documents, Desktop, Mail, etc.)
 
-### 16. Verify Complete Setup
+### 14. Verify Complete Setup
 ```bash
 echo "=== System Info ==="
 sw_vers
