@@ -129,6 +129,7 @@ code --install-extension ms-python.python
 code --install-extension esbenp.prettier-vscode
 code --install-extension mechatroner.rainbow-csv
 code --install-extension Anthropic.claude-dev
+code --install-extension DavidAnson.vscode-markdownlint
 ```
 
 ### 4. Install Node.js and npm
