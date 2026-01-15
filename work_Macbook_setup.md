@@ -359,24 +359,13 @@ brew cleanup
 brew doctor
 ```
 
-### 9. Create System Backup
-**Enable Time Machine:**
-1. Go to System Settings → General → Time Machine
-2. Click "Add Backup Disk"
-3. Select your backup drive
-
-**Or set up iCloud sync:**
-1. Go to System Settings → [Your Name] → iCloud
-2. Enable desired options (Documents, Desktop, Mail, etc.)
-
-### 10. Verify Complete Setup
+### 9. Verify Complete Setup
 ```bash
 echo "=== System Info ==="
 sw_vers
 echo "\n=== Development Tools ==="
 node --version && npm --version
 python3 --version
-ruby --version
 git --version
 docker --version
 echo "\n=== Command Verification ==="
