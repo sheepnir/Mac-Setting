@@ -125,22 +125,11 @@ code --version
 
 Install essential extensions via CLI:
 ```bash
-code --install-extension dbaeumer.vscode-eslint
-code --install-extension esbenp.prettier-vscode
 code --install-extension ms-python.python
-code --install-extension eamodio.gitlens
-code --install-extension ms-azuretools.vscode-docker
-code --install-extension GitHub.Copilot
+code --install-extension esbenp.prettier-vscode
+code --install-extension mechatroner.rainbow-csv
+code --install-extension Anthropic.claude-dev
 ```
-
-Or open VS Code and install manually:
-- ESLint
-- Prettier
-- Python
-- GitLens
-- Docker
-- GitHub Copilot
-- Thunder Client or REST Client
 
 ### 4. Install Node.js and npm
 ```bash
@@ -176,23 +165,7 @@ python3 -m venv ~/Developer/.venv
 source ~/Developer/.venv/bin/activate
 ```
 
-### 6. Install Ruby
-```bash
-brew install ruby
-```
-
-Add Ruby to PATH:
-```bash
-echo 'export PATH="/usr/local/opt/ruby/bin:$PATH"' >> ~/.zprofile
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-```
-
-Verify installation:
-```bash
-ruby --version
-```
-
-### 7. Set Up SSH Keys for GitHub
+### 6. Set Up SSH Keys for GitHub
 Generate SSH key:
 ```bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
@@ -223,7 +196,7 @@ Verify SSH connection:
 ssh -T git@github.com
 ```
 
-### 8. Install Git Tools
+### 7. Install Git Tools
 **GitHub CLI:**
 ```bash
 brew install gh
@@ -235,7 +208,7 @@ gh auth login
 brew install git-flow
 ```
 
-### 9. Install Database Tools
+### 8. Install Database Tools
 **PostgreSQL:**
 ```bash
 brew install postgresql@15
@@ -258,7 +231,7 @@ Verify installation:
 mongosh --version
 ```
 
-### 10. Install Docker
+### 9. Install Docker
 ```bash
 brew install --cask docker
 ```
@@ -268,7 +241,7 @@ Verify installation:
 docker --version
 ```
 
-### 11. Install Development Tools
+### 10. Install Development Tools
 **Postman (API testing):**
 ```bash
 brew install --cask postman
@@ -289,12 +262,11 @@ brew install --cask insomnia
 brew install jetbrains-toolbox
 ```
 
-### 12. Verify Development Environment
+### 11. Verify Development Environment
 ```bash
 node --version
 npm --version
 python3 --version
-ruby --version
 git --version
 docker --version
 code --version
